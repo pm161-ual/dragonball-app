@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Character extends Model
 {
     /** @use HasFactory<\Database\Factories\CharacterFactory> */
-    use HasFactory;
+    use HasFactory, SoftDeletes; // SoftDeletes: cuando se borre un personaje no se elimina completamente sino que viaja a la papelera.
 
     // Campos que se pueden rellenar con create() y update()
     protected $fillable = [
@@ -23,6 +23,7 @@ class Character extends Model
         'description',
         'image',
         'affiliation',
+        'planet_id',
     ];
 
     /**
