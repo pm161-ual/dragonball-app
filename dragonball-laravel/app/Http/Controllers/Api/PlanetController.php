@@ -44,8 +44,9 @@ class PlanetController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Planet $planet) // Pongo Planet $planet para no estar buscando el id sino que Laravel me lo busque automaticamente y me lo pase como objeto
     {
-        //
+        $planet->delete(); // Esto me borra el planeta que le paso por id
+        return response()->noContent(); // Esto me borra el planeta que le paso por id
     }
 }
