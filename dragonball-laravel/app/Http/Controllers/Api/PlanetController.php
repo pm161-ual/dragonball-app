@@ -12,11 +12,18 @@ class PlanetController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return Planet::all(); // Esto me devuelve todos los planetas
-    }
+       // Esta funcion me devuelve todos los planetas paginados de 10 en 10 y si le paso un parametro name me filtra por nombre
+       $query = Planet::query();
 
+       if ($request->filled('name')) {
+           $query->where('name', 'like', '%' . $request->input('name') . '%');
+       }
+
+       return $query->paginate(10)->withQueryString(); // Esto me devuelve todos los planetas paginados de 10 en 10 y si le paso un parametro name me filtra por nombre
+    }
+    //Uso withQueryString() para que los enlaces de paginación conserven los filtros activos
     /**
      * Store a newly created resource in storage.
      */

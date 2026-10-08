@@ -13,7 +13,8 @@ class CharacterController extends Controller
      */
     public function index()
     {
-        return Character::with('planet')->get(); 
+        //return Character::with('planet')->get();
+        return Character::with('planet')->paginate(10); // Esto me devuelve todos los personajes paginados de 10 en 10 con su planeta asociado 
     }
 
     /**
