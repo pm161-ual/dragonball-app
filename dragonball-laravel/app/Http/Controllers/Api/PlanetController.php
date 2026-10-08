@@ -22,7 +22,17 @@ class PlanetController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([ // Valida los datos y guarda en $data solo los campos de la lista (si algo falla, responde 422)
+
+            'name' => 'required|string|max:255',
+            'is_destroyed' => 'required|boolean',
+            'description' => 'nullable|string',
+            'image' => 'nullable|url',
+        ]);
+
+        $planet = Planet::create($data);
+
+        return response()->json($planet, 201);
     }
 
     /**
