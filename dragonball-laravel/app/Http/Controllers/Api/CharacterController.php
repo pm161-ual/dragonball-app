@@ -44,8 +44,9 @@ class CharacterController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Character $character) // Pongo Character $character para no estar buscando el id sino que Laravel me lo busque automaticamente y me lo pase como objeto
     {
-        //
+        $character->delete(); // Esto me borra el personaje que le paso por id
+        return response()->noContent(); 
     }
 }
