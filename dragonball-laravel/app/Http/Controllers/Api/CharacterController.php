@@ -21,7 +21,22 @@ class CharacterController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([ // Valida los datos y guarda en $data solo los campos de la lista (si algo falla, responde 422)
+
+            'name' => 'required|string|max:255',
+            'ki' => 'nullable|string|max:50',
+            'max_ki' => 'nullable|string|max:50',
+            'race' => 'nullable|string|max:100',
+            'gender' => 'nullable|string|max:100',
+            'description' => 'nullable|string',
+            'image' => 'nullable|url',
+            'affiliation' => 'nullable|string|max:100',
+            'planet_id' => 'nullable|exists:planets,id', // Verifica que el planeta exista en la tabla planets
+        ]);
+
+        $character = Character::create($data);
+
+        return response()->json($character->load('planet'), 201); // Devuelve el personaje creado con su planeta asociado
     }
 
     /**
