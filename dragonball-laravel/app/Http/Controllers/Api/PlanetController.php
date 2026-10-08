@@ -14,16 +14,21 @@ class PlanetController extends Controller
      */
     public function index(Request $request)
     {
-       // Esta funcion me devuelve todos los planetas paginados de 10 en 10 y si le paso un parametro name me filtra por nombre
+       // Esta funcion me devuelve todos los planetas paginados de 10 en 10 y si le paso un parametro name me filtra por nombre. 
+        //Uso withQueryString() para que los enlaces de paginación conserven los filtros activos
+        
        $query = Planet::query();
 
        if ($request->filled('name')) {
            $query->where('name', 'like', '%' . $request->input('name') . '%');
        }
 
+       if ($request->filled('is_destroyed')) {
+           $query->where('is_destroyed', $request->boolean('is_destroyed'));
+       }
+
        return $query->paginate(10)->withQueryString(); // Esto me devuelve todos los planetas paginados de 10 en 10 y si le paso un parametro name me filtra por nombre
     }
-    //Uso withQueryString() para que los enlaces de paginación conserven los filtros activos
     /**
      * Store a newly created resource in storage.
      */
