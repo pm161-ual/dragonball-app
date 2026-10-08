@@ -51,9 +51,24 @@ class CharacterController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
-    {
-        //
+    public function update(Request $request, Character $character)
+   {
+        $data = $request->validate([ // Valida los datos y guarda en $data solo los campos de la lista (si algo falla, responde 422)
+
+            'name' => 'sometimes|string|max:255',
+            'ki' => 'nullable|string|max:50',
+            'max_ki' => 'nullable|string|max:50',
+            'race' => 'nullable|string|max:100',
+            'gender' => 'nullable|string|max:100',
+            'description' => 'nullable|string',
+            'image' => 'nullable|url',
+            'affiliation' => 'nullable|string|max:100',
+            'planet_id' => 'nullable|exists:planets,id', // Verifica que el planeta exista en la tabla planets
+        ]);
+
+        $character->update($data);
+
+        return response()->json($character->load('planet'), 200); // Devuelve el personaje actualizado con su planeta asociado
     }
 
     /**
