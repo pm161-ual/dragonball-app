@@ -46,9 +46,17 @@ class PlanetController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Planet $planet)
     {
-        //
+        $data = $request->validate([ // Valida los datos y guarda en $data solo los campos de la lista (si algo falla, responde 422)
+
+            'name' => 'sometimes|string|max:255', // es sometimes porque no es obligatorio que venga en la request, si no viene no lo valida y no lo actualiza
+            'is_destroyed' => 'sometimes|boolean',
+            'description' => 'nullable|string',
+            'image' => 'nullable|url',
+        ]);
+        $planet->update($data); // Esto me actualiza el planeta que le paso por id con los datos que le paso en la request
+        return $planet; // Esto me devuelve el planeta que le paso por id al actualizarse
     }
 
     /**
