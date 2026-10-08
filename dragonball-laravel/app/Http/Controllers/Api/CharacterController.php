@@ -11,10 +11,31 @@ class CharacterController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //return Character::with('planet')->get();
-        return Character::with('planet')->paginate(10); // Esto me devuelve todos los personajes paginados de 10 en 10 con su planeta asociado 
+        $query = Character::with('planet');
+
+        if ($request->filled('name')) {
+            $query->where('name', 'like', '%' . $request->input('name') . '%');
+        }
+
+        if ($request->filled('race')) {                      
+           $query->where('race', $request->input('race'));   
+        }
+
+        if ($request->filled('gender')) {                      
+            $query->where('gender', $request->input('gender'));   
+        }
+
+        if ($request->filled('affiliation')) {                      
+            $query->where('affiliation', $request->input('affiliation'));   
+        }
+
+        if ($request->filled('planet_id')) {                      
+            $query->where('planet_id', $request->input('planet_id'));   
+        }
+
+        return $query->paginate(10)->withQueryString();
     }
 
     /**
