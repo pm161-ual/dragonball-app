@@ -1,0 +1,56 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Dragon Ball API",
+        "description": "API para la aplicación de Dragon Ball",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/planets": {
+            "get": {
+                "tags": [
+                    "Planetas"
+                ],
+                "summary": "Listar planetas",
+                "operationId": "25cb46e57e95546cf011c085d88b3c1c",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "is_destroyed",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista paginada de planetas"
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Planetas",
+            "description": "Planetas"
+        }
+    ]
+}

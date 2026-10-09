@@ -5,18 +5,29 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Planet;
-
+use OpenApi\Attributes as OA;
 
 class PlanetController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    #[OA\Get(
+        path: '/api/planets',
+        summary: 'Listar planetas',
+        tags: ['Planetas'],
+        parameters: [
+            new OA\Parameter(name: 'name', in: 'query', required: false, schema: new OA\Schema(type: 'string')),
+            new OA\Parameter(name: 'is_destroyed', in: 'query', required: false, schema: new OA\Schema(type: 'boolean')),
+            new OA\Parameter(name: 'page', in: 'query', required: false, schema: new OA\Schema(type: 'integer')),
+        ],
+        responses: [
+            new OA\Response(response: 200, description: 'Lista paginada de planetas'),
+        ]
+    )]
+
     public function index(Request $request)
     {
        // Esta funcion me devuelve todos los planetas paginados de 10 en 10 y si le paso un parametro name me filtra por nombre. 
         //Uso withQueryString() para que los enlaces de paginación conserven los filtros activos
-        
+
        $query = Planet::query();
 
        if ($request->filled('name')) {
