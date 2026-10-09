@@ -44,6 +44,96 @@
                         "description": "Lista paginada de planetas"
                     }
                 }
+            },
+            "post": {
+                "tags": [
+                    "Planetas"
+                ],
+                "summary": "Crear un planeta",
+                "operationId": "f4277ef1bde595fc0ff27854748d3c7c",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "is_destroyed"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Vegeta"
+                                    },
+                                    "is_destroyed": {
+                                        "type": "boolean",
+                                        "example": true
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "Planeta natal de los Saiyans"
+                                    },
+                                    "image": {
+                                        "type": "string",
+                                        "example": "https://dragonball-api.com/planetas/Namek_U7.webp"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Planeta creado"
+                    },
+                    "401": {
+                        "description": "No autenticado"
+                    },
+                    "422": {
+                        "description": "Datos no válidos"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/planets/{planet}": {
+            "get": {
+                "tags": [
+                    "Planetas"
+                ],
+                "summary": "Ver un planeta",
+                "operationId": "295f8280f7da765241d177cb06d25682",
+                "parameters": [
+                    {
+                        "name": "planet",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Planeta encontrado"
+                    },
+                    "404": {
+                        "description": "Planeta no encontrado"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "sanctum": {
+                "type": "http",
+                "scheme": "bearer"
             }
         }
     },

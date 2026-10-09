@@ -40,9 +40,33 @@ class PlanetController extends Controller
 
        return $query->paginate(10)->withQueryString(); // Esto me devuelve todos los planetas paginados de 10 en 10 y si le paso un parametro name me filtra por nombre
     }
-    /**
-     * Store a newly created resource in storage.
-     */
+
+    #[OA\Post(
+    path: '/api/planets',
+    summary: 'Crear un planeta',
+    tags: ['Planetas'],
+    security: [['sanctum' => []]],
+    requestBody: new OA\RequestBody(
+        required: true,
+        content: new OA\JsonContent(
+            required: ['name', 'is_destroyed'],
+            properties: [
+                new OA\Property(property: 'name', type: 'string', example: 'Vegeta'),
+                new OA\Property(property: 'is_destroyed', type: 'boolean', example: true),
+                new OA\Property(property: 'description', type: 'string', example: 'Planeta natal de los Saiyans'),
+                new OA\Property(property: 'image', type: 'string', example: 'https://dragonball-api.com/planetas/Namek_U7.webp'
+),
+            ]
+        )
+    ),
+    responses: [
+        new OA\Response(response: 201, description: 'Planeta creado'),
+        new OA\Response(response: 401, description: 'No autenticado'),
+        new OA\Response(response: 422, description: 'Datos no válidos'),
+    ]
+  )]
+
+
     public function store(Request $request)
     {
         $data = $request->validate([ // Valida los datos y guarda en $data solo los campos de la lista (si algo falla, responde 422)
@@ -58,9 +82,18 @@ class PlanetController extends Controller
         return response()->json($planet, 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
+     #[OA\Get(
+        path: '/api/planets/{planet}',
+        summary: 'Ver un planeta',
+        tags: ['Planetas'],
+        parameters: [
+            new OA\Parameter(name: 'planet', in: 'path', required: true, schema: new OA\Schema(type: 'integer')),
+        ],
+        responses: [
+            new OA\Response(response: 200, description: 'Planeta encontrado'),
+            new OA\Response(response: 404, description: 'Planeta no encontrado'),
+        ]   
+    )]
     public function show(Planet $planet) // Pongo Planet $planet para no estar buscando el id sino que Laravel me lo busque automaticamente y me lo pase como objeto
     {
         return $planet; // Esto me devuelve el planeta que le paso por id
