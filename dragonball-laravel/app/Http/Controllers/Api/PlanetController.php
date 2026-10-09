@@ -99,9 +99,33 @@ class PlanetController extends Controller
         return $planet; // Esto me devuelve el planeta que le paso por id
     }
    
-    /**
-     * Update the specified resource in storage.
-     */
+    #[OA\Put(
+        path: '/api/planets/{planet}',
+        summary: 'Actualizar un planeta',
+        tags: ['Planetas'],
+        security: [['sanctum' => []]],
+        parameters: [
+               new OA\Parameter(name: 'planet', in: 'path', required: true, schema: new OA\Schema(type: 'integer')),
+        ],
+        requestBody: new OA\RequestBody(
+            required: true,
+            content: new OA\JsonContent(
+                properties: [
+                    new OA\Property(property: 'name', type: 'string', example: 'Vegeta'),
+                    new OA\Property(property: 'is_destroyed', type: 'boolean', example: true),
+                    new OA\Property(property: 'description', type: 'string', example: 'Planeta natal de los Saiyans'),
+                    new OA\Property(property: 'image', type: 'string', example: 'https://dragonball-api.com/planetas/Namek_U7.webp'
+    ),
+            ]
+        )
+    ),
+    responses: [
+        new OA\Response(response: 200, description: 'Planeta actualizado'),
+        new OA\Response(response: 401, description: 'No autenticado'),
+        new OA\Response(response: 404, description: 'Planeta no encontrado'),
+        new OA\Response(response: 422, description: 'Datos no válidos'),
+    ]
+    )]
     public function update(Request $request, Planet $planet)
     {
         $data = $request->validate([ // Valida los datos y guarda en $data solo los campos de la lista (si algo falla, responde 422)
@@ -115,9 +139,20 @@ class PlanetController extends Controller
         return $planet; // Esto me devuelve el planeta que le paso por id al actualizarse
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+    #[OA\Delete(
+        path: '/api/planets/{planet}',
+        summary: 'Eliminar planeta',
+        tags: ['Planetas'],
+        security: [['sanctum' => []]],
+        parameters: [
+            new OA\Parameter(name: 'planet', in: 'path', required: true, schema: new OA\Schema(type: 'integer')),
+        ],
+        responses: [
+            new OA\Response(response: 204, description: 'Planeta eliminado'),
+            new OA\Response(response: 401, description: 'No autenticado'),
+            new OA\Response(response: 404, description: 'Planeta no encontrado'),
+        ]   
+    )]
     public function destroy(Planet $planet) // Pongo Planet $planet para no estar buscando el id sino que Laravel me lo busque automaticamente y me lo pase como objeto
     {
         $planet->delete(); // Esto me borra el planeta que le paso por id

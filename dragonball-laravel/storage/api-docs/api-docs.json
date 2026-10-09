@@ -126,6 +126,103 @@
                         "description": "Planeta no encontrado"
                     }
                 }
+            },
+            "put": {
+                "tags": [
+                    "Planetas"
+                ],
+                "summary": "Actualizar un planeta",
+                "operationId": "65e4f2456d4a00f6467cb241fc37e5ce",
+                "parameters": [
+                    {
+                        "name": "planet",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Vegeta"
+                                    },
+                                    "is_destroyed": {
+                                        "type": "boolean",
+                                        "example": true
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "Planeta natal de los Saiyans"
+                                    },
+                                    "image": {
+                                        "type": "string",
+                                        "example": "https://dragonball-api.com/planetas/Namek_U7.webp"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Planeta actualizado"
+                    },
+                    "401": {
+                        "description": "No autenticado"
+                    },
+                    "404": {
+                        "description": "Planeta no encontrado"
+                    },
+                    "422": {
+                        "description": "Datos no válidos"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Planetas"
+                ],
+                "summary": "Eliminar planeta",
+                "operationId": "007ba98d278cf1110e6fc9d599f8c020",
+                "parameters": [
+                    {
+                        "name": "planet",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Planeta eliminado"
+                    },
+                    "401": {
+                        "description": "No autenticado"
+                    },
+                    "404": {
+                        "description": "Planeta no encontrado"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
             }
         }
     },
