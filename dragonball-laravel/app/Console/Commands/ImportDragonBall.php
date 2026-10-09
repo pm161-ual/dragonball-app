@@ -5,6 +5,8 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
 use App\Models\Planet;
+use App\Models\Character;
+
 
 class ImportDragonBall extends Command
 {
@@ -43,5 +45,32 @@ class ImportDragonBall extends Command
             );
         }
         $this->info('Planetas importados: ' . count($planets)); // Muestra un mensaje en la consola indicando cuántos planetas se han importado
+
+        $characters = Http::get('https://dragonball-api.com/api/characters', ['limit' => 100])->json("items"); // La URL hace una llamada a la API que tiene los datos de Dragon Ball.
+       
+        foreach ($characters as $item) {
+           $detail = Http::get('https://dragonball-api.com/api/characters/' . $item['id'])->json(); // La URL hace una llamada a la API que tiene los datos de Dragon Ball.
+
+           $planetId = null; // Inicializa la variable $planetId como null
+           if (!empty($detail['originPlanet'])) { // Si el planeta de origen no está vacío, busca el planeta en la base de datos y obtiene su ID
+               $planetId = Planet::where('external_id', $detail['originPlanet']['id'])->value('id');  
+           }
+
+           Character::updateOrCreate([
+                'external_id' => $item['id'], // Busca un personaje en la base de datos con el mismo ID externo que el del elemento actual
+                ], [
+                    'name' => $item['name'], // Si no existe, crea un nuevo registro
+                    'ki' => $item['ki'],
+                    'max_ki' => $item['maxKi'],
+                    'race' => $item['race'],
+                    'gender' => $item['gender'],
+                    'description' => $item['description'],
+                    'image' => $item['image'],
+                    'affiliation' => $item['affiliation'],
+                    'planet_id' => $planetId, // Asigna el ID del planeta de origen al personaje
+                ]
+            );
+        }
+        $this->info('Personajes importados: ' . count($characters));
     }
 }
