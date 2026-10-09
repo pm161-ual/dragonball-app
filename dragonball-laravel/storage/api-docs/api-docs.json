@@ -6,6 +6,288 @@
         "version": "1.0.0"
     },
     "paths": {
+        "/api/characters": {
+            "get": {
+                "tags": [
+                    "Personajes"
+                ],
+                "summary": "Listar personajes",
+                "operationId": "ad1aa009bd5672d0869aed6ca623d809",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "race",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "gender",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "affiliation",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "planet_id",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista paginada de personajes"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Personajes"
+                ],
+                "summary": "Crear un personaje",
+                "operationId": "123fb7ef0cf858078256cdb138be5ee1",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Goku"
+                                    },
+                                    "ki": {
+                                        "type": "string",
+                                        "example": "60.000.000"
+                                    },
+                                    "max_ki": {
+                                        "type": "string",
+                                        "example": "90 Septillion"
+                                    },
+                                    "race": {
+                                        "type": "string",
+                                        "example": "Saiyan"
+                                    },
+                                    "gender": {
+                                        "type": "string",
+                                        "example": "Male"
+                                    },
+                                    "affiliation": {
+                                        "type": "string",
+                                        "example": "Z Fighter"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "Protagonista de la serie"
+                                    },
+                                    "image": {
+                                        "type": "string",
+                                        "example": "https://dragonball-api.com/characters/goku_normal.webp"
+                                    },
+                                    "planet_id": {
+                                        "type": "integer",
+                                        "example": 2
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Personaje creado"
+                    },
+                    "401": {
+                        "description": "No autenticado"
+                    },
+                    "422": {
+                        "description": "Datos no válidos o el planeta no existe"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/characters/{character}": {
+            "get": {
+                "tags": [
+                    "Personajes"
+                ],
+                "summary": "Ver un personaje",
+                "operationId": "8cc252a14cb6b540af7584285a98081f",
+                "parameters": [
+                    {
+                        "name": "character",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Personaje encontrado"
+                    },
+                    "404": {
+                        "description": "Personaje no encontrado"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Personajes"
+                ],
+                "summary": "Actualizar un personaje",
+                "operationId": "0877616b25317ac39a41077724bf9421",
+                "parameters": [
+                    {
+                        "name": "character",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Goku"
+                                    },
+                                    "ki": {
+                                        "type": "string",
+                                        "example": "60.000.000"
+                                    },
+                                    "max_ki": {
+                                        "type": "string",
+                                        "example": "90 Septillion"
+                                    },
+                                    "race": {
+                                        "type": "string",
+                                        "example": "Saiyan"
+                                    },
+                                    "gender": {
+                                        "type": "string",
+                                        "example": "Male"
+                                    },
+                                    "affiliation": {
+                                        "type": "string",
+                                        "example": "Z Fighter"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "Protagonista de la serie"
+                                    },
+                                    "image": {
+                                        "type": "string",
+                                        "example": "https://dragonball-api.com/characters/goku_normal.webp"
+                                    },
+                                    "planet_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Personaje actualizado"
+                    },
+                    "401": {
+                        "description": "No autenticado"
+                    },
+                    "404": {
+                        "description": "Personaje no encontrado"
+                    },
+                    "422": {
+                        "description": "Datos no válidos o el planeta no existe"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Personajes"
+                ],
+                "summary": "Eliminar personaje",
+                "operationId": "e39dcb07bfca8d756c724a33bac66338",
+                "parameters": [
+                    {
+                        "name": "character",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Personaje eliminado"
+                    },
+                    "401": {
+                        "description": "No autenticado"
+                    },
+                    "404": {
+                        "description": "Personaje no encontrado"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
         "/api/planets": {
             "get": {
                 "tags": [
@@ -235,6 +517,10 @@
         }
     },
     "tags": [
+        {
+            "name": "Personajes",
+            "description": "Personajes"
+        },
         {
             "name": "Planetas",
             "description": "Planetas"
