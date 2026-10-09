@@ -5,6 +5,8 @@ namespace Tests\Feature;
 use App\Models\Planet;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use Laravel\Sanctum\Sanctum;
+use App\Models\User;
 
 class PlanetTest extends TestCase
 {
@@ -21,5 +23,28 @@ class PlanetTest extends TestCase
         // 3. Comprueba que la respuesta tiene un código de estado 200 (OK) y que el JSON devuelto tiene 3 elementos en el array 'data'
         $response->assertStatus(200);
         $response->assertJsonCount(3, 'data');
+    }
+    public function test_crear_planeta_sin_token(): void
+    {
+        $response = $this->postJson('/api/planets' , [
+            'name' => 'Vegeta',
+            'is_destroyed' => true,
+
+        ]);
+
+        $response->assertStatus(401); // Comprueba que la respuesta tiene un código de estado 401 (No autorizado)
+    }
+
+    public function test_crear_planeta_con_token(): void
+    {
+        Sanctum::actingAs(User::factory()->create());
+
+        $response = $this->postJson('/api/planets', [
+            'name' => 'Vegeta',
+            'is_destroyed' => true,
+        ]);
+
+        $response->assertStatus(201);
+        $this->assertDatabaseHas('planets', ['name' => 'Vegeta']);
     }
 }
