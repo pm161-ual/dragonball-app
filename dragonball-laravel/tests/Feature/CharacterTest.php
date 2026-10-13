@@ -43,4 +43,45 @@ class CharacterTest extends TestCase
             'planet_id' => $namek->id,
         ]);
     }
+
+        // El filtro por raza devuelve solo los de esa raza
+    public function test_filtrar_personajes_por_raza(): void
+    {
+        Character::factory()->create(['race' => 'Saiyan']);
+        Character::factory()->create(['race' => 'Saiyan']);
+        Character::factory()->create(['race' => 'Human']);
+
+        $response = $this->getJson('/api/characters?race=Saiyan');
+
+        $response->assertStatus(200);
+        $response->assertJsonCount(2, 'data');
+    }
+
+    // No se puede crear un personaje en un planeta que no existe
+    public function test_crear_personaje_con_planeta_que_no_existe_devuelve_422(): void
+    {
+        Sanctum::actingAs(User::factory()->create());
+
+        $response = $this->postJson('/api/characters', [
+            'name' => 'Goku',
+            'planet_id' => 999,
+        ]);
+
+        $response->assertStatus(422);
+        $response->assertJsonValidationErrors(['planet_id']);
+    }
+    
+    public function test_modificar_personaje(): void
+    {
+        Sanctum::actingAs(User::factory()->create());
+        $character = Character::factory()->create(['name' => 'Kakarot']);
+
+        $response = $this->putJson('/api/characters/' . $character->id, [
+            'name' => 'Goku',
+        ]);
+
+        $response->assertStatus(200);
+        $response->assertJsonPath('name', 'Goku');
+    }
+
 }
