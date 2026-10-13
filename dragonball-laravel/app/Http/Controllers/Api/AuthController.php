@@ -67,7 +67,7 @@ class AuthController extends Controller
     ]
 )]
 
-    //Cuando el usuario hace logout, se eliminan todos los tokens de acceso del usuario
+    //Esta funcion borra el token actual 
     public function logout(Request $request){
         $request->user()->currentAccessToken()->delete();
 

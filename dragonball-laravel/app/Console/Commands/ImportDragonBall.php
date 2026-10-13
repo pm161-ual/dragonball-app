@@ -22,7 +22,7 @@ class ImportDragonBall extends Command
      *
      * @var string
      */
-    protected $description = 'El mundo de Dragon Ball.';
+    protected $description = 'El mundo de Dragon Ball.'; 
 
     /**
      * Execute the console command.
@@ -37,7 +37,7 @@ class ImportDragonBall extends Command
             Planet::updateOrCreate([
                 'external_id' => $item['id'], // Busca un planeta en la base de datos con el mismo ID externo que el del elemento actual
             ], [
-                'name' => $item['name'], // Si no existe, crea un nuevo registro
+                'name' => $item['name'], 
                 'is_destroyed' => $item['isDestroyed'],
                 'description' => $item['description'],
                 'image' => $item['image'],
@@ -56,10 +56,11 @@ class ImportDragonBall extends Command
                $planetId = Planet::where('external_id', $detail['originPlanet']['id'])->value('id');  
            }
 
+           // Si no existe, crea un nuevo registro
            Character::updateOrCreate([
                 'external_id' => $item['id'], // Busca un personaje en la base de datos con el mismo ID externo que el del elemento actual
                 ], [
-                    'name' => $item['name'], // Si no existe, crea un nuevo registro
+                    'name' => $item['name'], 
                     'ki' => $item['ki'],
                     'max_ki' => $item['maxKi'],
                     'race' => $item['race'],

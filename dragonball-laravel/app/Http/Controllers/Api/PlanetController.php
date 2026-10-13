@@ -25,7 +25,7 @@ class PlanetController extends Controller
 
     public function index(Request $request)
     {
-       // Esta funcion me devuelve todos los planetas paginados de 10 en 10 y si le paso un parametro name me filtra por nombre. 
+       // Esta funcion me devuelve todos los planetas paginados de 10 en 10 y si le paso un parametro name me filtra por nombre y por is_destroyed. 
         //Uso withQueryString() para que los enlaces de paginación conserven los filtros activos
 
        $query = Planet::query();
@@ -38,7 +38,7 @@ class PlanetController extends Controller
            $query->where('is_destroyed', $request->boolean('is_destroyed'));
        }
 
-       return $query->paginate(10)->withQueryString(); // Esto me devuelve todos los planetas paginados de 10 en 10 y si le paso un parametro name me filtra por nombre
+       return $query->paginate(10)->withQueryString();
     }
 
     #[OA\Post(
@@ -77,9 +77,9 @@ class PlanetController extends Controller
             'image' => 'nullable|url',
         ]);
 
-        $planet = Planet::create($data);
+        $planet = Planet::create($data); // Crea el planeta con datos con los datos validados.
 
-        return response()->json($planet, 201);
+        return response()->json($planet, 201); //Responde 201 que quiere decir que se ha creado correctamente.
     }
 
      #[OA\Get(
@@ -155,7 +155,7 @@ class PlanetController extends Controller
     )]
     public function destroy(Planet $planet) // Pongo Planet $planet para no estar buscando el id sino que Laravel me lo busque automaticamente y me lo pase como objeto
     {
-        $planet->delete(); // Esto me borra el planeta que le paso por id
-        return response()->noContent(); // Esto me borra el planeta que le paso por id
+        $planet->delete(); // Esto responde 204 el planeta que le paso por id
+        return response()->noContent(); 
     }
 }

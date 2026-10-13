@@ -27,9 +27,9 @@ class CharacterController extends Controller
         )]
     public function index(Request $request)
     {
-        $query = Character::with('planet');
+        $query = Character::with('planet'); // Empieza la consulta con el planeta de cada personaje.
 
-        if ($request->filled('name')) {
+        if ($request->filled('name')) { 
             $query->where('name', 'like', '%' . $request->input('name') . '%');
         }
 
