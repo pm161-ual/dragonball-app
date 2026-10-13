@@ -47,4 +47,37 @@ class PlanetTest extends TestCase
         $response->assertStatus(201);
         $this->assertDatabaseHas('planets', ['name' => 'Vegeta']);
     }
+    
+    
+    public function test_ver_planeta_que_no_existe_devuelve_404(): void
+    {
+        $response = $this->getJson('/api/planets/999');
+
+        $response->assertStatus(404);
+    }
+
+    public function test_borrar_planeta(): void
+    {
+        Sanctum::actingAs(User::factory()->create());
+
+        $planet = Planet::factory()->create();
+
+        $response = $this->deleteJson('/api/planets/' . $planet->id);
+
+        $response->assertStatus(204);
+        $this->assertSoftDeleted($planet);
+    }
+
+    public function test_crear_planeta_sin_nombre(): void
+    {
+        Sanctum::actingAs(User::factory()->create());   
+
+        $response = $this->postJson('/api/planets', [
+            'is_destroyed' => true,                     
+        ]);
+
+      $response->assertStatus(422);                    // ✓ datos no válidos
+        $response->assertJsonValidationErrors(['name']); // ✓ el error es en 'name'
+    }
+
 }
