@@ -14,6 +14,10 @@ const { data } = await useFetch(`${config.public.apiBase}/characters`, {
     }
 });
 
+watch([search, race], () => {
+    page.value = 1
+})
+
 
 </script>
 <template>
@@ -38,7 +42,6 @@ const { data } = await useFetch(`${config.public.apiBase}/characters`, {
                 <option value="Majin">Majin</option>
             </select>
         </div>
-
         <div class="grid gap-4 md:grid-cols-1 mt-8">
             <NuxtLink
                 v-for="personaje in data?.data"
@@ -49,6 +52,19 @@ const { data } = await useFetch(`${config.public.apiBase}/characters`, {
                     class="h-24 w-24 rounded-lg object-cover object-top bg-gray-700 shrink-0" />
                 <h2 class="text-xl font-bold text-orange-500">{{ personaje.name }}</h2>
             </NuxtLink>
+        </div>
+        <div class="flex justify-center items-center gap-4 mt-8">
+            <button @click="page--" :disabled="page === 1"
+                class="rounded-full bg-orange-500 px-6 py-2 font-bold hover:bg-orange-600 disabled:opacity-30">
+                ← Anterior
+            </button>
+
+            <span>Página {{ page }} de {{ data?.last_page }}</span>
+
+            <button @click="page++" :disabled="page === data?.last_page"
+                class="rounded-full bg-orange-500 px-6 py-2 font-bold hover:bg-orange-600 disabled:opacity-30">
+                Siguiente →
+            </button>
         </div>
     </div>
 </template>
