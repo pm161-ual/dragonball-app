@@ -1,3 +1,16 @@
 @import "tailwindcss";
 
+.fondo-espacio {
+  background-color: #05060f;
+  background-image:
+    radial-gradient(1px 1px at 20px 30px, white, transparent),
+    radial-gradient(1px 1px at 90px 70px, white, transparent),
+    radial-gradient(1px 1px at 160px 15px, #cfe3ff, transparent),
+    radial-gradient(1.5px 1.5px at 230px 55px, white, transparent),
+    radial-gradient(1px 1px at 300px 25px, white, transparent),
+    radial-gradient(1px 1px at 370px 80px, #fff3c4, transparent),
+    radial-gradient(1px 1px at 420px 45px, white, transparent);
+  background-size: 450px 100px;
+}
+
 
