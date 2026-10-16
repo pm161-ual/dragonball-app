@@ -5,7 +5,7 @@ const config = useRuntimeConfig();
 const search = useState('planeta-busqueda', () => '');
 const destroyed = useState('planeta-destroyed', () => '');
 const page = useState('planeta-pagina', () => 1);
-
+const token = useCookie('token');
 const { data } = await useFetch(`${config.public.apiBase}/planets`, {
     query: {
         name: search,
@@ -22,7 +22,13 @@ watch([search, destroyed], () => {
 </script>
 <template>
     <div class="p-8">
-        <h1 class="text-4xl font-bold text-orange-500">Planetas</h1>
+        <div class="flex justify-between items-center">
+            <h1 class="text-4xl font-bold text-orange-500">Planetas</h1>
+            <NuxtLink v-if="token" to="/planetas/nuevo" class="rounded-full bg-orange-500 px-6 py-2 font-bold hover:bg-orange-600">
+                Nuevo planeta
+            </NuxtLink>
+
+        </div>
 
         <div class="flex gap-4 mt-4">
             <input type="text" v-model="search" placeholder="Buscar planeta..."

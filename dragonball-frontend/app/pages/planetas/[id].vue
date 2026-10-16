@@ -47,12 +47,17 @@ const { data } = await useFetch(`${config.public.apiBase}/planets/${route.params
                     {{ data?.is_destroyed ? 'Destruido' : 'Intacto' }}
                 </p>
                 <p class="mt-6 text-gray-300 leading-relaxed text-justify">{{ data?.description }}</p>
-                <button v-if="token" @click="confirmando = true"
-                    class="mt-6 rounded-full bg-red-600 px-6 py-2 font-bold hover:bg-red-700 self-start">
-                    Borrar planeta
-                </button>
-            </div>
-           
+                <div v-if="token" class="flex gap-4 mt-6">
+                    <NuxtLink :to="`/planetas/editar/${route.params.id}`"
+                        class="rounded-full bg-orange-500 px-6 py-2 font-bold hover:bg-orange-600">
+                        Editar
+                    </NuxtLink>
+                    <button @click="confirmando = true"
+                        class="rounded-full bg-red-600 px-6 py-2 font-bold hover:bg-red-700">
+                        Borrar planeta
+                    </button>
+                </div>
+            </div> 
         </div>
 
         <div v-if="data?.characters?.length > 0" class="relative mt-12">
