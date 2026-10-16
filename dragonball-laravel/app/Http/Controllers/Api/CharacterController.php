@@ -49,7 +49,7 @@ class CharacterController extends Controller
             $query->where('planet_id', $request->input('planet_id'));   
         }
 
-        return $query->paginate(10)->withQueryString();
+        return $query->paginate(12)->withQueryString();
     }
 
     #[OA\Post(

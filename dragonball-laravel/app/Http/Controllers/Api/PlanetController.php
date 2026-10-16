@@ -25,7 +25,7 @@ class PlanetController extends Controller
 
     public function index(Request $request)
     {
-       // Esta funcion me devuelve todos los planetas paginados de 10 en 10 y si le paso un parametro name me filtra por nombre y por is_destroyed. 
+       // Esta funcion me devuelve todos los planetas paginados de 12 en 12 y si le paso un parametro name me filtra por nombre y por is_destroyed. 
         //Uso withQueryString() para que los enlaces de paginación conserven los filtros activos
 
        $query = Planet::query();
@@ -38,7 +38,7 @@ class PlanetController extends Controller
            $query->where('is_destroyed', $request->boolean('is_destroyed'));
        }
 
-       return $query->paginate(10)->withQueryString();
+       return $query->paginate(12)->withQueryString();
     }
 
     #[OA\Post(
@@ -96,7 +96,7 @@ class PlanetController extends Controller
     )]
     public function show(Planet $planet) // Pongo Planet $planet para no estar buscando el id sino que Laravel me lo busque automaticamente y me lo pase como objeto
     {
-        return $planet; // Esto me devuelve el planeta que le paso por id
+        return $planet->load('characters'); // Esto me devuelve el planeta que le paso por id con sus personajes asociados
     }
    
     #[OA\Put(

@@ -29,5 +29,15 @@
     <main class="flex-1 flex flex-col">
       <slot />
     </main>
+    <footer>
+      <div class="bg-gray-800 text-gray-400 text-center py-4 border-t">
+         <nav class="flex gap-6 font-bold justify-center mb-4">
+            <NuxtLink to="/personajes" class="hover:text-orange-500">Personajes</NuxtLink>
+            <NuxtLink to="/planetas" class="hover:text-orange-500">Planetas</NuxtLink>
+        </nav>
+        <p>&copy; 2026 Dragon Ball App</p>
+        <p class="text-sm">Datos de dragonball-api.com</p>
+      </div>
+    </footer>
   </div>
 </template>

@@ -42,7 +42,7 @@ watch([search, race], () => {
                 <option value="Majin">Majin</option>
             </select>
         </div>
-        <div class="grid gap-4 md:grid-cols-1 mt-8">
+        <div class="grid gap-4 md:grid-cols-4 mt-8">
             <NuxtLink
                 v-for="personaje in data?.data"
                 :key="personaje.id"

@@ -40,5 +40,12 @@ const characters = computed(() =>data.value?.data?.slice(0, 4) ?? []);
       </div>
     </div>
   </section>
+  <section class="text-center py-24 px-4">
+      <h2 class="text-3xl font-bold text-center mb-8">Explora los planetas</h2>
+      <p class="text-gray-400 mt-4">Desde la Tierra hasta Namek: descubre dónde viven tus personajes favoritos</p>
+      <NuxtLink to="/planetas" class="mt-8 inline-block rounded-full bg-orange-500 px-8 py-3 font-bold hover:bg-orange-600">
+            Ver planetas
+        </NuxtLink>
+  </section>
 </div>
 </template>
