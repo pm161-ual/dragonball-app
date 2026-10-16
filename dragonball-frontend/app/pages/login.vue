@@ -4,6 +4,8 @@ const config = useRuntimeConfig();
 const email = ref('');
 const password = ref('');
 const error = ref('');
+const { mostrar } = useToast();
+
 
 const token = useCookie('token');
 
@@ -18,6 +20,7 @@ async function entrar() {
             }
         });
         token.value = respuesta.token;
+        mostrar('Bienvenido');
         navigateTo('/personajes');
     } catch {
         error.value = 'Email o contraseña incorrectos';

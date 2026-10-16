@@ -16,6 +16,8 @@ async function salir() {
         navigateTo('/');
     }
 }
+const { mensaje } = useToast();
+
 </script>
 
 <template>
@@ -63,5 +65,12 @@ async function salir() {
         <p class="text-sm">Datos de dragonball-api.com</p>
       </div>
     </footer>
+    <Transition name="toast">
+    <div v-if="mensaje"
+        class="fixed bottom-6 right-6 z-50 bg-green-600 text-white font-bold rounded-xl px-6 py-3 shadow-2xl">
+        {{ mensaje }}
+    </div>
+</Transition>
+
   </div>
 </template>

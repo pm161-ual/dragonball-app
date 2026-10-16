@@ -4,6 +4,8 @@ const config = useRuntimeConfig();
 const token = useCookie('token');
 const confirmando = ref(false);
 const errorBorrar = ref('');
+const { mostrar } = useToast();
+
 
 async function borrar() {
     errorBorrar.value = '';
@@ -14,6 +16,7 @@ async function borrar() {
                 Authorization: `Bearer ${token.value}`
             }
         });
+        mostrar('Planeta borrado');
         navigateTo('/planetas');
     } catch {
         errorBorrar.value = 'No se ha podido borrar. Vuelve a iniciar sesión.';

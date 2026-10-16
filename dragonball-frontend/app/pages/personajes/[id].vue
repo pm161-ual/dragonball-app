@@ -1,6 +1,8 @@
 <script setup>
 const route = useRoute();
 const config = useRuntimeConfig();
+const { mostrar } = useToast();
+
 
 const { data } = await useFetch(`${config.public.apiBase}/characters/${route.params.id}`);
 
@@ -57,10 +59,17 @@ async function borrar() {
 
                 <p class="mt-6 text-gray-300 leading-relaxed text-justify">{{ data?.description }}</p>
 
-                <button v-if="token" @click="confirmando = true"
-                    class="mt-6 rounded-full bg-red-600 px-6 py-2 font-bold hover:bg-red-700">
+                <div v-if="token" class="flex gap-4 mt-6">
+                <NuxtLink :to="`/personajes/editar/${route.params.id}`"
+                    class="rounded-full bg-orange-500 px-6 py-2 font-bold hover:bg-orange-600">
+                    Editar
+                </NuxtLink>
+                <button @click="confirmando = true"
+                    class="rounded-full bg-red-600 px-6 py-2 font-bold hover:bg-red-700">
                     Borrar personaje
                 </button>
+</div>
+
             </div>
 
         </div>

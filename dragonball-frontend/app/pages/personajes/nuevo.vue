@@ -1,6 +1,8 @@
 <script setup>
 const config = useRuntimeConfig();
 const token = useCookie('token');
+const { mostrar } = useToast();
+
 
 const form = ref({
     name: '',
@@ -28,6 +30,7 @@ async function guardar() {
             headers: { Authorization: `Bearer ${token.value}` },
             body: form.value
         });
+        mostrar('Personaje creado');
         navigateTo(`/personajes/${nuevo.id}`);
     } catch (e) {
         errores.value = e.data?.errors ?? {};
