@@ -6,7 +6,7 @@ const { data } = await useFetch(`${config.public.apiBase}/characters/${route.par
 </script>
 
 <template>
-    <div class="p-8 relative overflow-hidden min-h-full">
+    <div class="p-8 relative overflow-hidden flex-1">
 
         <div class="absolute inset-0 bg-cover bg-center blur-sm opacity-20 scale-110"
             :style="{ backgroundImage: `url(${data?.image})` }"></div>
