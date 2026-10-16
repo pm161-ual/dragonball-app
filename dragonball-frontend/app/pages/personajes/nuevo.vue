@@ -1,4 +1,6 @@
 <script setup>
+
+definePageMeta({ middleware: 'auth' })
 const config = useRuntimeConfig();
 const token = useCookie('token');
 const { mostrar } = useToast();
