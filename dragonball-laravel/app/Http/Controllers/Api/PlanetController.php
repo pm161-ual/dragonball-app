@@ -37,8 +37,10 @@ class PlanetController extends Controller
        if ($request->filled('is_destroyed')) {
            $query->where('is_destroyed', $request->boolean('is_destroyed'));
        }
-
-       return $query->paginate(12)->withQueryString();
+       $perPage = $request->integer('per_page', 12); // Permite al usuario especificar cuántos resultados por página desea, con un valor predeterminado de 12.  
+       $perPage = min(100, $perPage); // Limita el número máximo de resultados por página a 100 para evitar sobrecargar la respuesta.
+       $perPage = max(1, $perPage); // Limita el número mínimo de resultados por página a 0 para evitar errores.
+       return $query->paginate($perPage)->withQueryString();
     }
 
     #[OA\Post(
