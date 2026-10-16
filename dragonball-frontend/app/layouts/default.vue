@@ -1,3 +1,23 @@
+<script setup>
+const config = useRuntimeConfig();
+
+const token = useCookie('token');
+
+async function salir() {
+    try {
+        await $fetch(`${config.public.apiBase}/logout`, {
+            method: 'POST',
+            headers: {
+                Authorization: `Bearer ${token.value}`
+            }
+        });
+    } finally {
+        token.value = null;
+        navigateTo('/');
+    }
+}
+</script>
+
 <template>
   <div class="min-h-screen bg-gray-900 text-white flex flex-col">
     <header class="fondo-espacio px-6 py-3 flex items-center gap-8 border-b-4 border-orange-500">
@@ -20,9 +40,13 @@
             <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
             </a>
 
-            <NuxtLink to="/login" class="rounded-full bg-orange-500 px-5 py-2 font-bold hover:bg-orange-600">
-            Acceder
+            <NuxtLink v-if="!token" to="/login" class="rounded-full bg-orange-500 px-5 py-2 font-bold hover:bg-orange-600">
+                Acceder
             </NuxtLink>
+            <button v-else @click="salir" class="rounded-full bg-orange-500 px-5 py-2 font-bold hover:bg-orange-600">
+                Cerrar sesión
+            </button>
+
         </div>
     </header>
 
