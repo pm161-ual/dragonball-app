@@ -32,29 +32,23 @@ class AuthController extends Controller
 )]
 
     public function login(Request $request){
-        // Valida los datos de entrada
         $data = $request->validate([
             'email' => 'required|email',
             'password' => 'required|string',
         ]);
-        // Busca el usuario por email 
         $user = User::where('email', $data['email'])->first();
 
-        // Si no encuentra el usuario o la contraseña es incorrecta, devuelve un error 401
         if (!$user || !Hash::check($data['password'], $user->password)) {
             return response()->json(['message' => 'Invalid credentials'], 401);
         }
 
-        // Crea un token de acceso para el usuario si la autenticación es correcta
         $token = $user->createToken('api_token')->plainTextToken;
 
-        // Devuelve el usuario y el token de acceso
         return response()->json([
             'user' => $user,
             'token' => $token,
         ]);
     }
-
 
     #[OA\Post(
     path: '/api/logout',
@@ -67,7 +61,6 @@ class AuthController extends Controller
     ]
 )]
 
-    //Esta funcion borra el token actual 
     public function logout(Request $request){
         $request->user()->currentAccessToken()->delete();
 

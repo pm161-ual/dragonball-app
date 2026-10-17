@@ -35,7 +35,6 @@ class AuthTest extends TestCase
         $response->assertStatus(401);
     }
 
-    // El logout corta la pulsera: el token se borra
     public function test_logout_borra_el_token(): void
     {
         $user = User::factory()->create();

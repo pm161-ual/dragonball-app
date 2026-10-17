@@ -13,7 +13,6 @@ class CharacterTest extends TestCase
 {
     use RefreshDatabase;
 
-    
     public function test_ver_personaje_trae_su_planeta(): void
     {
         $planet = Planet::factory()->create(['name' => 'Namek']);
@@ -25,7 +24,6 @@ class CharacterTest extends TestCase
         $response->assertJsonPath('planet.name', 'Namek');
     }
 
-    
     public function test_cambiar_personaje_de_planeta(): void
     {
         Sanctum::actingAs(User::factory()->create());
@@ -44,7 +42,6 @@ class CharacterTest extends TestCase
         ]);
     }
 
-        // El filtro por raza devuelve solo los de esa raza
     public function test_filtrar_personajes_por_raza(): void
     {
         Character::factory()->create(['race' => 'Saiyan']);
@@ -57,7 +54,6 @@ class CharacterTest extends TestCase
         $response->assertJsonCount(2, 'data');
     }
 
-    // No se puede crear un personaje en un planeta que no existe
     public function test_crear_personaje_con_planeta_que_no_existe_devuelve_422(): void
     {
         Sanctum::actingAs(User::factory()->create());
@@ -70,7 +66,7 @@ class CharacterTest extends TestCase
         $response->assertStatus(422);
         $response->assertJsonValidationErrors(['planet_id']);
     }
-    
+
     public function test_modificar_personaje(): void
     {
         Sanctum::actingAs(User::factory()->create());

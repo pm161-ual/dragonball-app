@@ -17,7 +17,6 @@ class ModelsTest extends TestCase
         $this->assertInstanceOf(HasMany::class, (new Planet())->characters());
     }
 
-    
     public function test_is_destroyed_es_booleano(): void
     {
         $planet = new Planet(['is_destroyed' => 1]);

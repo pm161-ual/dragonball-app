@@ -10,17 +10,14 @@ use App\Models\User;
 
 class PlanetTest extends TestCase
 {
-    use RefreshDatabase; // Esto asegura que la base de datos se reinicie después de cada prueba, para que no haya interferencias entre pruebas.
+    use RefreshDatabase;
 
-    public function test_listar_planetas(): void 
+    public function test_listar_planetas(): void
     {
-        // 1. Preparar en este caso se crea 3 planetas en la base de datos usando el factory de Planet
         Planet::factory()->count(3)->create();
 
-        // 2. Hace que la peticion Get use la URL /api/planets y guarda la respuesta en la variable $response
         $response = $this->getJson('/api/planets');
 
-        // 3. Comprueba que la respuesta tiene un código de estado 200 (OK) y que el JSON devuelto tiene 3 elementos en el array 'data'
         $response->assertStatus(200);
         $response->assertJsonCount(3, 'data');
     }
@@ -32,7 +29,7 @@ class PlanetTest extends TestCase
 
         ]);
 
-        $response->assertStatus(401); // Comprueba que la respuesta tiene un código de estado 401 (No autorizado)
+        $response->assertStatus(401);
     }
 
     public function test_crear_planeta_con_token(): void
@@ -49,8 +46,7 @@ class PlanetTest extends TestCase
         $response->assertStatus(201);
         $this->assertDatabaseHas('planets', ['name' => 'Vegeta']);
     }
-    
-    
+
     public function test_ver_planeta_que_no_existe_devuelve_404(): void
     {
         $response = $this->getJson('/api/planets/999');
@@ -72,14 +68,14 @@ class PlanetTest extends TestCase
 
     public function test_crear_planeta_sin_nombre(): void
     {
-        Sanctum::actingAs(User::factory()->create());   
+        Sanctum::actingAs(User::factory()->create());
 
         $response = $this->postJson('/api/planets', [
-            'is_destroyed' => true,                     
+            'is_destroyed' => true,
         ]);
 
-      $response->assertStatus(422);                    // ✓ datos no válidos
-        $response->assertJsonValidationErrors(['name']); // ✓ el error es en 'name'
+      $response->assertStatus(422);
+        $response->assertJsonValidationErrors(['name']);
     }
 
 }

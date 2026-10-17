@@ -22,4 +22,3 @@ return Application::configure(basePath: dirname(__DIR__))
             return $request->is('api/*');
         });
     })->create();
-

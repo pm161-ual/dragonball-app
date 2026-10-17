@@ -27,26 +27,26 @@ class CharacterController extends Controller
         )]
     public function index(Request $request)
     {
-        $query = Character::with('planet'); // Empieza la consulta con el planeta de cada personaje.
+        $query = Character::with('planet');
 
-        if ($request->filled('name')) { 
+        if ($request->filled('name')) {
             $query->where('name', 'like', '%' . $request->input('name') . '%');
         }
 
-        if ($request->filled('race')) {                      
-           $query->where('race', $request->input('race'));   
+        if ($request->filled('race')) {
+           $query->where('race', $request->input('race'));
         }
 
-        if ($request->filled('gender')) {                      
-            $query->where('gender', $request->input('gender'));   
+        if ($request->filled('gender')) {
+            $query->where('gender', $request->input('gender'));
         }
 
-        if ($request->filled('affiliation')) {                      
-            $query->where('affiliation', $request->input('affiliation'));   
+        if ($request->filled('affiliation')) {
+            $query->where('affiliation', $request->input('affiliation'));
         }
 
-        if ($request->filled('planet_id')) {                      
-            $query->where('planet_id', $request->input('planet_id'));   
+        if ($request->filled('planet_id')) {
+            $query->where('planet_id', $request->input('planet_id'));
         }
 
         return $query->paginate(12)->withQueryString();
@@ -82,7 +82,7 @@ class CharacterController extends Controller
     )]
     public function store(Request $request)
     {
-        $data = $request->validate([ // Valida los datos y guarda en $data solo los campos de la lista (si algo falla, responde 422)
+        $data = $request->validate([
 
             'name' => 'required|string|max:255',
             'ki' => 'required|string|max:50',
@@ -92,12 +92,12 @@ class CharacterController extends Controller
             'description' => 'required|string',
             'image' => 'required|url',
             'affiliation' => 'required|string|max:100',
-            'planet_id' => 'required|exists:planets,id', // Verifica que el planeta exista en la tabla planets
+            'planet_id' => 'required|exists:planets,id',
         ]);
 
         $character = Character::create($data);
 
-        return response()->json($character->load('planet'), 201); // Devuelve el personaje creado con su planeta asociado
+        return response()->json($character->load('planet'), 201);
     }
 
     #[OA\Get(
@@ -110,12 +110,12 @@ class CharacterController extends Controller
         responses: [
             new OA\Response(response: 200, description: 'Personaje encontrado'),
             new OA\Response(response: 404, description: 'Personaje no encontrado'),
-        ]   
+        ]
     )]
-    public function show(Character $character) // Pongo Character $character para no estar buscando el id sino que Laravel me lo busque automaticamente y me lo pase como objeto
+    public function show(Character $character)
     {
-        return $character->load('planet'); // Esto me devuelve el personaje que le paso por id
-        
+        return $character->load('planet');
+
     }
 
  #[OA\Put(
@@ -151,7 +151,7 @@ class CharacterController extends Controller
     )]
     public function update(Request $request, Character $character)
    {
-        $data = $request->validate([ // Valida los datos y guarda en $data solo los campos de la lista (si algo falla, responde 422)
+        $data = $request->validate([
 
             'name' => 'sometimes|required|string|max:255',
             'ki' => 'sometimes|required|string|max:50',
@@ -161,12 +161,12 @@ class CharacterController extends Controller
             'description' => 'sometimes|required|string',
             'image' => 'sometimes|required|url',
             'affiliation' => 'sometimes|required|string|max:100',
-            'planet_id' => 'sometimes|required|exists:planets,id', // Verifica que el planeta exista en la tabla planets
+            'planet_id' => 'sometimes|required|exists:planets,id',
         ]);
 
         $character->update($data);
 
-        return response()->json($character->load('planet'), 200); // Devuelve el personaje actualizado con su planeta asociado
+        return response()->json($character->load('planet'), 200);
     }
 
     #[OA\Delete(
@@ -181,11 +181,11 @@ class CharacterController extends Controller
             new OA\Response(response: 204, description: 'Personaje eliminado'),
             new OA\Response(response: 401, description: 'No autenticado'),
             new OA\Response(response: 404, description: 'Personaje no encontrado'),
-        ]   
+        ]
     )]
-    public function destroy(Character $character) // Pongo Character $character para no estar buscando el id sino que Laravel me lo busque automaticamente y me lo pase como objeto
+    public function destroy(Character $character)
     {
-        $character->delete(); // Esto me borra el personaje que le paso por id
-        return response()->noContent(); 
+        $character->delete();
+        return response()->noContent();
     }
 }

@@ -25,8 +25,6 @@ class PlanetController extends Controller
 
     public function index(Request $request)
     {
-       // Esta funcion me devuelve todos los planetas paginados de 12 en 12 y si le paso un parametro name me filtra por nombre y por is_destroyed. 
-        //Uso withQueryString() para que los enlaces de paginación conserven los filtros activos
 
        $query = Planet::query();
 
@@ -37,9 +35,9 @@ class PlanetController extends Controller
        if ($request->filled('is_destroyed')) {
            $query->where('is_destroyed', $request->boolean('is_destroyed'));
        }
-       $perPage = $request->integer('per_page', 12); // Permite al usuario especificar cuántos resultados por página desea, con un valor predeterminado de 12.  
-       $perPage = min(100, $perPage); // Limita el número máximo de resultados por página a 100 para evitar sobrecargar la respuesta.
-       $perPage = max(1, $perPage); // Limita el número mínimo de resultados por página a 1 para evitar errores.
+       $perPage = $request->integer('per_page', 12);
+       $perPage = min(100, $perPage);
+       $perPage = max(1, $perPage);
        return $query->paginate($perPage)->withQueryString();
     }
 
@@ -68,10 +66,9 @@ class PlanetController extends Controller
     ]
   )]
 
-
     public function store(Request $request)
     {
-        $data = $request->validate([ // Valida los datos y guarda en $data solo los campos de la lista (si algo falla, responde 422)
+        $data = $request->validate([
 
             'name' => 'required|string|max:255',
             'is_destroyed' => 'required|boolean',
@@ -79,9 +76,9 @@ class PlanetController extends Controller
             'image' => 'required|url',
         ]);
 
-        $planet = Planet::create($data); // Crea el planeta con datos con los datos validados.
+        $planet = Planet::create($data);
 
-        return response()->json($planet, 201); //Responde 201 que quiere decir que se ha creado correctamente.
+        return response()->json($planet, 201);
     }
 
      #[OA\Get(
@@ -94,13 +91,13 @@ class PlanetController extends Controller
         responses: [
             new OA\Response(response: 200, description: 'Planeta encontrado'),
             new OA\Response(response: 404, description: 'Planeta no encontrado'),
-        ]   
+        ]
     )]
-    public function show(Planet $planet) // Pongo Planet $planet para no estar buscando el id sino que Laravel me lo busque automaticamente y me lo pase como objeto
+    public function show(Planet $planet)
     {
-        return $planet->load('characters'); // Esto me devuelve el planeta que le paso por id con sus personajes asociados
+        return $planet->load('characters');
     }
-   
+
     #[OA\Put(
         path: '/api/planets/{planet}',
         summary: 'Actualizar un planeta',
@@ -130,15 +127,15 @@ class PlanetController extends Controller
     )]
     public function update(Request $request, Planet $planet)
     {
-        $data = $request->validate([ // Valida los datos y guarda en $data solo los campos de la lista (si algo falla, responde 422)
+        $data = $request->validate([
 
-            'name' => 'sometimes|required|string|max:255', // es sometimes porque no es obligatorio que venga en la request, si no viene no lo valida y no lo actualiza
+            'name' => 'sometimes|required|string|max:255',
             'is_destroyed' => 'sometimes|boolean',
             'description' => 'sometimes|required|string',
             'image' => 'sometimes|required|url',
         ]);
-        $planet->update($data); // Esto me actualiza el planeta que le paso por id con los datos que le paso en la request
-        return $planet; // Esto me devuelve el planeta que le paso por id al actualizarse
+        $planet->update($data);
+        return $planet;
     }
 
     #[OA\Delete(
@@ -153,11 +150,11 @@ class PlanetController extends Controller
             new OA\Response(response: 204, description: 'Planeta eliminado'),
             new OA\Response(response: 401, description: 'No autenticado'),
             new OA\Response(response: 404, description: 'Planeta no encontrado'),
-        ]   
+        ]
     )]
-    public function destroy(Planet $planet) // Pongo Planet $planet para no estar buscando el id sino que Laravel me lo busque automaticamente y me lo pase como objeto
+    public function destroy(Planet $planet)
     {
-        $planet->delete(); // Esto responde 204 el planeta que le paso por id
-        return response()->noContent(); 
+        $planet->delete();
+        return response()->noContent();
     }
 }

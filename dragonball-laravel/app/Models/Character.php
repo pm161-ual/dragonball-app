@@ -9,10 +9,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Character extends Model
 {
-    /** @use HasFactory<\Database\Factories\CharacterFactory> */
-    use HasFactory, SoftDeletes; // SoftDeletes: cuando se borre un personaje no se elimina completamente sino que viaja a la papelera.
+    use HasFactory, SoftDeletes;
 
-    // Campos que se pueden rellenar con create() y update()
     protected $fillable = [
         'external_id',
         'name',
@@ -26,9 +24,6 @@ class Character extends Model
         'planet_id',
     ];
 
-    /**
-     * Un personaje pertenece a un planeta
-     */
     public function planet(): BelongsTo
     {
         return $this->belongsTo(Planet::class);
