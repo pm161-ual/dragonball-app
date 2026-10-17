@@ -1,75 +1,44 @@
-# Nuxt Minimal Starter
+# Dragon Ball Web
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+Web hecha con Nuxt que usa la API de Laravel para mostrar los personajes y planetas de Dragon Ball.
 
-## Setup
+Se pueden ver, buscar y filtrar, y si inicias sesión también se pueden crear, editar y borrar.
 
-Make sure to install dependencies:
+## Tecnologías
 
-```bash
-# npm
-npm install
+- Nuxt 4.5.2
+- Tailwind CSS 4
 
-# pnpm
-pnpm install
+Uso la versión 4.5.2 de Nuxt porque la 4.6.0 daba error al arrancar.
 
-# yarn
-yarn install
+## Instalación
 
-# bun
-bun install
-```
+1. Tener la API de Laravel funcionando (ver su README).
+2. Instalar las librerías con npm install
+3. Arrancar la web con npm run dev
+4. Abrir en el navegador http://localhost:3000
 
-## Development Server
+La dirección de la API se cambia en el archivo nuxt.config.ts
 
-Start the development server on `http://localhost:3000`:
+## Páginas
 
-```bash
-# npm
-npm run dev
+- Portada: personajes destacados con animaciones.
+- Personajes: lista con buscador, filtro por raza y páginas.
+- Ficha del personaje: sus datos y su planeta.
+- Planetas: lista con buscador, filtro de destruidos y páginas.
+- Ficha del planeta: sus datos y sus habitantes.
+- Login: para entrar a la zona de administración.
 
-# pnpm
-pnpm dev
+## Zona de administración
 
-# yarn
-yarn dev
+Solo se puede entrar con login.
 
-# bun
-bun run dev
-```
+- Crear personajes y planetas.
+- Editar personajes y planetas.
+- Cambiar un personaje de planeta.
+- Borrar personajes y planetas.
 
-## Production
+## Usuario de prueba
 
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+- Email: admin@example.com
+- Contraseña: password
