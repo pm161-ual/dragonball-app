@@ -2,9 +2,9 @@
 
 const config = useRuntimeConfig();
 
-const search = useState('planeta-busqueda', () => '');
-const destroyed = useState('planeta-destroyed', () => '');
-const page = useState('planeta-pagina', () => 1);
+const search = ref('');
+const destroyed = ref('');
+const page = ref(1);
 const token = useCookie('token');
 const { data } = await useFetch(`${config.public.apiBase}/planets`, {
     query: {

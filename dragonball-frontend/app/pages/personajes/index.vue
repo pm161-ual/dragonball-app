@@ -2,9 +2,9 @@
 
 const config = useRuntimeConfig();
 
-const search = useState('personaje-busqueda', () => '');
-const race = useState('personaje-raza', () => '');
-const page = useState('personaje-pagina', () => 1);
+const search = ref('');
+const race = ref('');
+const page = ref(1);
 const token = useCookie('token');
 
 const { data } = await useFetch(`${config.public.apiBase}/characters`, {
@@ -63,7 +63,7 @@ watch([search, race], () => {
                 ← Anterior
             </button>
 
-            <span class="text-sm whitespace-nowrap">Página {{ page }} de {{ data?.last_page }}</span>
+            <span>Página {{ page }} de {{ data?.last_page }}</span>
 
             <button @click="page++" :disabled="page === data?.last_page"
                 class="rounded-full bg-orange-500 px-4 sm:px-6 whitespace-nowrap py-2 font-bold hover:bg-orange-600 disabled:opacity-30">
