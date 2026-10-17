@@ -42,6 +42,8 @@ class PlanetTest extends TestCase
         $response = $this->postJson('/api/planets', [
             'name' => 'Vegeta',
             'is_destroyed' => true,
+            'description' => 'Planeta de los saiyans',
+            'image' => 'https://example.com/vegeta.png'
         ]);
 
         $response->assertStatus(201);

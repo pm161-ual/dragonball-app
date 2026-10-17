@@ -39,24 +39,24 @@ async function guardar() {
 
             <label class="flex flex-col gap-1">
                 <span class="text-sm text-gray-400">Nombre *</span>
-                <input v-model="form.name" type="text" class="bg-gray-700 rounded px-4 py-2" />
+                <input v-model="form.name" type="text" required class="bg-gray-700 rounded px-4 py-2" />
                 <span v-if="errores.name" class="text-sm text-red-500">{{ errores.name[0] }}</span>
             </label>
 
             <label class="flex items-center gap-3">
-                <input v-model="form.is_destroyed" type="checkbox" class="h-5 w-5 accent-orange-500" />
+                <input v-model="form.is_destroyed"  type="checkbox" class="h-5 w-5 accent-orange-500" />
                 <span>Destruido</span>
             </label>
 
             <label class="flex flex-col gap-1">
                 <span class="text-sm text-gray-400">URL de la imagen</span>
-                <input v-model="form.image" type="url" placeholder="https://..." class="bg-gray-700 rounded px-4 py-2" />
+                <input required v-model="form.image" type="url" placeholder="https://..." class="bg-gray-700 rounded px-4 py-2" />
                 <span v-if="errores.image" class="text-sm text-red-500">{{ errores.image[0] }}</span>
             </label>
 
             <label class="flex flex-col gap-1">
                 <span class="text-sm text-gray-400">Descripción</span>
-                <textarea v-model="form.description" rows="4" class="bg-gray-700 rounded px-4 py-2"></textarea>
+                <textarea required v-model="form.description" rows="4" class="bg-gray-700 rounded px-4 py-2"></textarea>
             </label>
 
             <button type="submit" class="self-start rounded-full bg-orange-500 px-6 py-2 font-bold hover:bg-orange-600">

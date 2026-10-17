@@ -48,37 +48,37 @@ async function guardar() {
 
             <label class="flex flex-col gap-1">
                 <span class="text-sm text-gray-400">Nombre *</span>
-                <input v-model="form.name" type="text" class="bg-gray-700 rounded px-4 py-2" />
+                <input v-model="form.name" type="text" required class="bg-gray-700 rounded px-4 py-2" />
                 <span v-if="errores.name" class="text-sm text-red-500">{{ errores.name[0] }}</span>
             </label>
 
             <div class="grid sm:grid-cols-2 gap-4">
                 <label class="flex flex-col gap-1">
                     <span class="text-sm text-gray-400">Raza</span>
-                    <input v-model="form.race" type="text" class="bg-gray-700 rounded px-4 py-2" />
+                    <input v-model="form.race" type="text" required class="bg-gray-700 rounded px-4 py-2" />
                 </label>
                 <label class="flex flex-col gap-1">
                     <span class="text-sm text-gray-400">Género</span>
-                    <input v-model="form.gender" type="text" class="bg-gray-700 rounded px-4 py-2" />
+                    <input v-model="form.gender" type="text" required class="bg-gray-700 rounded px-4 py-2" />
                 </label>
                 <label class="flex flex-col gap-1">
                     <span class="text-sm text-gray-400">Ki</span>
-                    <input v-model="form.ki" type="text" placeholder="60.000.000" class="bg-gray-700 rounded px-4 py-2" />
+                    <input v-model="form.ki" required type="text" placeholder="60.000.000" class="bg-gray-700 rounded px-4 py-2" />
                 </label>
                 <label class="flex flex-col gap-1">
                     <span class="text-sm text-gray-400">Ki máximo</span>
-                    <input v-model="form.max_ki" type="text" placeholder="90 Septillion" class="bg-gray-700 rounded px-4 py-2" />
+                    <input v-model="form.max_ki" required type="text" placeholder="90 Septillion" class="bg-gray-700 rounded px-4 py-2" />
                 </label>
             </div>
 
             <label class="flex flex-col gap-1">
                 <span class="text-sm text-gray-400">Afiliación</span>
-                <input v-model="form.affiliation" type="text" class="bg-gray-700 rounded px-4 py-2" />
+                <input v-model="form.affiliation" required type="text" class="bg-gray-700 rounded px-4 py-2" />
             </label>
 
             <label class="flex flex-col gap-1">
                 <span class="text-sm text-gray-400">URL de la imagen</span>
-                <input v-model="form.image" type="url" placeholder="https://..." class="bg-gray-700 rounded px-4 py-2" />
+                <input v-model="form.image" type="url" required placeholder="https://..." class="bg-gray-700 rounded px-4 py-2" />
                 <span v-if="errores.image" class="text-sm text-red-500">{{ errores.image[0] }}</span>
             </label>
 
@@ -95,7 +95,7 @@ async function guardar() {
 
             <label class="flex flex-col gap-1">
                 <span class="text-sm text-gray-400">Descripción</span>
-                <textarea v-model="form.description" rows="4" class="bg-gray-700 rounded px-4 py-2"></textarea>
+                <textarea required v-model="form.description" rows="4" class="bg-gray-700 rounded px-4 py-2"></textarea>
             </label>
 
             <button type="submit" class="self-start rounded-full bg-orange-500 px-6 py-2 font-bold hover:bg-orange-600">

@@ -75,8 +75,8 @@ class PlanetController extends Controller
 
             'name' => 'required|string|max:255',
             'is_destroyed' => 'required|boolean',
-            'description' => 'nullable|string',
-            'image' => 'nullable|url',
+            'description' => 'required|string',
+            'image' => 'required|url',
         ]);
 
         $planet = Planet::create($data); // Crea el planeta con datos con los datos validados.
@@ -132,10 +132,10 @@ class PlanetController extends Controller
     {
         $data = $request->validate([ // Valida los datos y guarda en $data solo los campos de la lista (si algo falla, responde 422)
 
-            'name' => 'sometimes|string|max:255', // es sometimes porque no es obligatorio que venga en la request, si no viene no lo valida y no lo actualiza
+            'name' => 'sometimes|required|string|max:255', // es sometimes porque no es obligatorio que venga en la request, si no viene no lo valida y no lo actualiza
             'is_destroyed' => 'sometimes|boolean',
-            'description' => 'nullable|string',
-            'image' => 'nullable|url',
+            'description' => 'sometimes|required|string',
+            'image' => 'sometimes|required|url',
         ]);
         $planet->update($data); // Esto me actualiza el planeta que le paso por id con los datos que le paso en la request
         return $planet; // Esto me devuelve el planeta que le paso por id al actualizarse

@@ -85,14 +85,14 @@ class CharacterController extends Controller
         $data = $request->validate([ // Valida los datos y guarda en $data solo los campos de la lista (si algo falla, responde 422)
 
             'name' => 'required|string|max:255',
-            'ki' => 'nullable|string|max:50',
-            'max_ki' => 'nullable|string|max:50',
-            'race' => 'nullable|string|max:100',
-            'gender' => 'nullable|string|max:100',
-            'description' => 'nullable|string',
-            'image' => 'nullable|url',
-            'affiliation' => 'nullable|string|max:100',
-            'planet_id' => 'nullable|exists:planets,id', // Verifica que el planeta exista en la tabla planets
+            'ki' => 'required|string|max:50',
+            'max_ki' => 'required|string|max:50',
+            'race' => 'required|string|max:100',
+            'gender' => 'required|string|max:100',
+            'description' => 'required|string',
+            'image' => 'required|url',
+            'affiliation' => 'required|string|max:100',
+            'planet_id' => 'required|exists:planets,id', // Verifica que el planeta exista en la tabla planets
         ]);
 
         $character = Character::create($data);
@@ -153,15 +153,15 @@ class CharacterController extends Controller
    {
         $data = $request->validate([ // Valida los datos y guarda en $data solo los campos de la lista (si algo falla, responde 422)
 
-            'name' => 'sometimes|string|max:255',
-            'ki' => 'nullable|string|max:50',
-            'max_ki' => 'nullable|string|max:50',
-            'race' => 'nullable|string|max:100',
-            'gender' => 'nullable|string|max:100',
-            'description' => 'nullable|string',
-            'image' => 'nullable|url',
-            'affiliation' => 'nullable|string|max:100',
-            'planet_id' => 'nullable|exists:planets,id', // Verifica que el planeta exista en la tabla planets
+            'name' => 'sometimes|required|string|max:255',
+            'ki' => 'sometimes|required|string|max:50',
+            'max_ki' => 'sometimes|required|string|max:50',
+            'race' => 'sometimes|required|string|max:100',
+            'gender' => 'sometimes|required|string|max:100',
+            'description' => 'sometimes|required|string',
+            'image' => 'sometimes|required|url',
+            'affiliation' => 'sometimes|required|string|max:100',
+            'planet_id' => 'sometimes|required|exists:planets,id', // Verifica que el planeta exista en la tabla planets
         ]);
 
         $character->update($data);
