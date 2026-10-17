@@ -68,10 +68,10 @@ const { data } = await useFetch(`${config.public.apiBase}/planets/${route.params
                     v-for="personaje in data.characters"
                     :key="personaje.id"
                     :to="`/personajes/${personaje.id}`"
-                    class="flex items-center gap-4 p-4 bg-gray-800 rounded-xl border border-gray-700 hover:bg-gray-700">
+                    class="flex items-center gap-4 p-4 flex-col sm:flex-row text-center sm:text-left bg-gray-800 rounded-xl border border-gray-700 hover:bg-gray-700">
                     <img :src="personaje.image" :alt="personaje.name"
-                        class="h-24 w-24 rounded-lg object-cover object-top bg-gray-700 shrink-0" />
-                    <h3 class="text-xl font-bold text-orange-500">{{ personaje.name }}</h3>
+                        class="h-24 w-24 h-24 w-24 → h-20 w-20 sm:h-24 sm:w-24 rounded-lg object-cover object-top bg-gray-700 shrink-0" />
+                    <h3 class="text-xl font-bold text-orange-500 text-xl → text-base sm:text-xl">{{ personaje.name }}</h3>
                 </NuxtLink>
             </div>
         </div>

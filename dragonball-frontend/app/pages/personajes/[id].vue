@@ -38,10 +38,10 @@ async function borrar() {
 
         <div class="relative flex flex-col md:flex-row items-center justify-center gap-12 mt-8">
 
-            <img :src="data?.image" :alt="data?.name" class="h-[70vh] object-contain" />
+            <img :src="data?.image" :alt="data?.name" class="h-[45vh] md:h-[70vh] object-contain" />
 
             <div class="max-w-2xl bg-black/40 rounded-xl p-6">
-                <div class="flex justify-between items-start gap-6">
+                <div class="flex justify-between items-start gap-6 flex-col sm:flex-row">
                     <div class="space-y-2 text-lg">
                         <h1 class="text-5xl font-bold text-orange-500 mb-4">{{ data?.name }}</h1>
                         <p><span class="text-gray-400">Raza:</span> {{ data?.race }}</p>
@@ -68,7 +68,7 @@ async function borrar() {
                     class="rounded-full bg-red-600 px-6 py-2 font-bold hover:bg-red-700">
                     Borrar personaje
                 </button>
-</div>
+           </div>
 
             </div>
 

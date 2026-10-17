@@ -28,7 +28,7 @@ watch([search, race], () => {
             <NuxtLink v-if="token" to="/personajes/nuevo" class="rounded-full bg-orange-500 px-6 py-2 font-bold hover:bg-orange-600"> Nuevo personaje</NuxtLink>
         </div>
 
-        <div class="flex gap-4 mt-4">
+        <div class="flex gap-4 mt-4 flex-col sm:flex-row">
             <input type="text" v-model="search" placeholder="Buscar personaje..."
                 class="bg-gray-800 rounded px-4 py-2" />
             <select v-model="race"
@@ -59,14 +59,14 @@ watch([search, race], () => {
         </div>
         <div class="flex justify-center items-center gap-4 mt-8">
             <button @click="page--" :disabled="page === 1"
-                class="rounded-full bg-orange-500 px-6 py-2 font-bold hover:bg-orange-600 disabled:opacity-30">
+                class="rounded-full bg-orange-500 px-4 sm:px-6 whitespace-nowrap py-2 font-bold hover:bg-orange-600 disabled:opacity-30">
                 ← Anterior
             </button>
 
-            <span>Página {{ page }} de {{ data?.last_page }}</span>
+            <span class="text-sm whitespace-nowrap">Página {{ page }} de {{ data?.last_page }}</span>
 
             <button @click="page++" :disabled="page === data?.last_page"
-                class="rounded-full bg-orange-500 px-6 py-2 font-bold hover:bg-orange-600 disabled:opacity-30">
+                class="rounded-full bg-orange-500 px-4 sm:px-6 whitespace-nowrap py-2 font-bold hover:bg-orange-600 disabled:opacity-30">
                 Siguiente →
             </button>
         </div>

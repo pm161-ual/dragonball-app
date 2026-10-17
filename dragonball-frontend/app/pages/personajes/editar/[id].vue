@@ -52,7 +52,7 @@ async function guardar() {
         </NuxtLink>
 
         <form @submit.prevent="guardar" class="bg-gray-800 rounded-xl p-8 w-full max-w-2xl flex flex-col gap-4 mx-auto mt-8">
-            <h1 class="text-3xl font-bold text-orange-500">✏️ Editar personaje</h1>
+            <h1 class="text-3xl font-bold text-orange-500">Editar personaje</h1>
 
             <label class="flex flex-col gap-1">
                 <span class="text-sm text-gray-400">Nombre *</span>
