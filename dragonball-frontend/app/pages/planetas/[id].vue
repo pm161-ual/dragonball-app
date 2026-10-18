@@ -18,8 +18,14 @@ async function borrar() {
         });
         mostrar('Planeta borrado');
         navigateTo('/planetas');
-    } catch {
-        errorBorrar.value = 'No se ha podido borrar. Vuelve a iniciar sesión.';
+    } catch (error) {
+        if (error.statusCode === 409) {
+            errorBorrar.value = error.data?.message ?? 'Este planeta tiene habitantes, no se puede borrar.';
+        } else if (error.statusCode === 401) {
+            errorBorrar.value = 'Tu sesión ha caducado. Vuelve a iniciar sesión.';
+        } else {
+            errorBorrar.value = 'No se ha podido borrar el planeta.';
+        }
     }
 }
 
@@ -70,8 +76,8 @@ const { data } = await useFetch(`${config.public.apiBase}/planets/${route.params
                     :to="`/personajes/${personaje.id}`"
                     class="flex items-center gap-4 p-4 flex-col sm:flex-row text-center sm:text-left bg-gray-800 rounded-xl border border-gray-700 hover:bg-gray-700">
                     <img :src="personaje.image" :alt="personaje.name"
-                        class="h-24 w-24 h-24 w-24 → h-20 w-20 sm:h-24 sm:w-24 rounded-lg object-cover object-top bg-gray-700 shrink-0" />
-                    <h3 class="text-xl font-bold text-orange-500 text-xl → text-base sm:text-xl">{{ personaje.name }}</h3>
+                        class="h-20 w-20 sm:h-24 sm:w-24 rounded-lg object-cover object-top bg-gray-700 shrink-0"/>
+                    <h3 class="text-base sm:text-xl font-bold text-orange-500">{{ personaje.name }}</h3>
                 </NuxtLink>
             </div>
         </div>

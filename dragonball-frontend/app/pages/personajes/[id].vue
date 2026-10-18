@@ -19,9 +19,14 @@ async function borrar() {
                 Authorization: `Bearer ${token.value}`
             }
         });
+        mostrar('Personaje borrado');
         navigateTo('/personajes');
-    } catch {
-        errorBorrar.value = 'No se ha podido borrar. Vuelve a iniciar sesión.';
+    } catch (error) {
+        if (error.statusCode === 401) {
+            errorBorrar.value = 'Tu sesión ha caducado. Vuelve a iniciar sesión.';
+        } else {
+            errorBorrar.value = 'No se ha podido borrar el personaje.';
+        }
     }
 }
 </script>

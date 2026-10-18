@@ -150,11 +150,18 @@ class PlanetController extends Controller
             new OA\Response(response: 204, description: 'Planeta eliminado'),
             new OA\Response(response: 401, description: 'No autenticado'),
             new OA\Response(response: 404, description: 'Planeta no encontrado'),
+            new OA\Response(response: 409, description: 'No se puede eliminar un planeta que tiene personajes asignados'),
         ]
     )]
     public function destroy(Planet $planet)
     {
+        if ($planet->characters()->exists()) {
+            return response()->json([
+                'message' => 'No se puede eliminar un planeta que tiene personajes asignados. Cámbialos de planeta primero.',
+            ], 409);
+        }
         $planet->delete();
+
         return response()->noContent();
     }
 }
