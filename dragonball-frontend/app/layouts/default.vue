@@ -2,6 +2,7 @@
 const config = useRuntimeConfig();
 
 const token = useCookie('token');
+const esAdmin = useCookie('esAdmin');
 
 async function salir() {
     try {
@@ -13,6 +14,7 @@ async function salir() {
         });
     } finally {
         token.value = null;
+        esAdmin.value = null;
         navigateTo('/');
     }
 }

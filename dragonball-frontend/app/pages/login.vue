@@ -5,7 +5,7 @@ const email = ref('');
 const password = ref('');
 const error = ref('');
 const { mostrar } = useToast();
-
+const esAdmin = useCookie('esAdmin'); 
 
 const token = useCookie('token');
 
@@ -20,10 +20,11 @@ async function entrar() {
             }
         });
         token.value = respuesta.token;
+        esAdmin.value = respuesta.user.is_admin;
         mostrar('Bienvenido');
         navigateTo('/personajes');
-    } catch {
-        error.value = 'Email o contraseña incorrectos';
+    } catch (e) {
+        error.value = e.data?.message || 'Error al iniciar sesión';
     }
 }
 </script>

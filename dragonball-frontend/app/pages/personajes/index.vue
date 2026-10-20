@@ -13,6 +13,7 @@ const gender = ref('');
 const affiliation = ref('');
 const planetId = ref('');
 
+const esAdmin = useCookie('esAdmin');
 
 const { data } = await useFetch(`${config.public.apiBase}/characters`, {
     query: {
@@ -64,7 +65,7 @@ function ordenar(columna) {
     <div class="p-8">
         <div class="flex justify-between items-center">
             <h1 class="text-4xl font-bold text-orange-500">Personajes</h1>
-            <NuxtLink v-if="token" to="/personajes/nuevo" class="rounded-full bg-orange-500 px-6 py-2 font-bold hover:bg-orange-600"> Nuevo personaje</NuxtLink>
+            <NuxtLink v-if="esAdmin" to="/personajes/nuevo" class="rounded-full bg-orange-500 px-6 py-2 font-bold hover:bg-orange-600"> Nuevo personaje</NuxtLink>
         </div>
 
         <div class="flex gap-4 mt-4 flex-col sm:flex-row">
