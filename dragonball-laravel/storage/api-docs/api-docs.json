@@ -127,6 +127,32 @@
                         "schema": {
                             "type": "integer"
                         }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "name",
+                                "race",
+                                "gender",
+                                "affiliation"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "direction",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "asc",
+                                "desc"
+                            ]
+                        }
                     }
                 ],
                 "responses": {
@@ -564,6 +590,9 @@
                     },
                     "404": {
                         "description": "Planeta no encontrado"
+                    },
+                    "409": {
+                        "description": "No se puede eliminar un planeta que tiene personajes asignados"
                     }
                 },
                 "security": [
