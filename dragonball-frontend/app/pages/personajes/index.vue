@@ -6,20 +6,44 @@ const search = ref('');
 const race = ref('');
 const page = ref(1);
 const token = useCookie('token');
-const vista = useState('fichas');
+const vista = useState('vista', () => 'fichas');
+const sort = ref('');
+const direction = ref('asc');
 
 
 const { data } = await useFetch(`${config.public.apiBase}/characters`, {
     query: {
         name: search,
         race: race,
+        sort: sort,
+        direction: direction,
         page: page
     }
 });
 
-watch([search, race], () => {
+
+
+watch([search, race, sort, direction], () => {
     page.value = 1
 })
+
+function ordenar(columna) {
+   if (sort.value === columna) {
+        if (direction.value === 'asc') {
+            // pasar a desc
+            direction.value = 'desc';
+        } else {
+            // quitar orden
+            sort.value = '';
+            direction.value = 'asc';
+        }
+    } else {
+        // esto se queda igual
+        sort.value = columna;
+        direction.value = 'asc';
+    }
+
+}
 
 
 </script>
@@ -67,10 +91,42 @@ watch([search, race], () => {
                 <thead>
                     <tr class="text-left text-orange-500">
                         <th class="p-2">Imagen</th>
-                        <th class="p-2">Nombre</th>
-                        <th class="p-2">Raza</th>
-                        <th class="p-2">Género</th>
-                        <th class="p-2">Afiliación</th>
+                        <th class="p-2 cursor-pointer" @click="ordenar('name')">
+                        <div class="flex items-center gap-2">
+                            Nombre
+                            <div class="flex flex-col text-[10px] leading-none">
+                                <span :class="sort === 'name' && direction === 'asc' ? 'text-white' : 'text-gray-600'">▲</span>
+                                <span :class="sort === 'name' && direction === 'desc' ? 'text-white' : 'text-gray-600'">▼</span>
+                            </div>
+                        </div>
+                    </th>
+                                            <th class="p-2 cursor-pointer" @click="ordenar('race')">
+                        <div class="flex items-center gap-2">
+                            Raza
+                            <div class="flex flex-col text-[10px] leading-none">
+                                <span :class="sort === 'race' && direction === 'asc' ? 'text-white' : 'text-gray-600'">▲</span>
+                                <span :class="sort === 'race' && direction === 'desc' ? 'text-white' : 'text-gray-600'">▼</span>
+                            </div>
+                        </div>
+                    </th>
+                                            <th class="p-2 cursor-pointer" @click="ordenar('gender')">
+                        <div class="flex items-center gap-2">
+                            Género
+                            <div class="flex flex-col text-[10px] leading-none">
+                                <span :class="sort === 'gender' && direction === 'asc' ? 'text-white' : 'text-gray-600'">▲</span>
+                                <span :class="sort === 'gender' && direction === 'desc' ? 'text-white' : 'text-gray-600'">▼</span>
+                            </div>
+                        </div>
+                    </th>
+                                            <th class="p-2 cursor-pointer" @click="ordenar('affiliation')">
+                        <div class="flex items-center gap-2">
+                            Afiliación
+                            <div class="flex flex-col text-[10px] leading-none">
+                                <span :class="sort === 'affiliation' && direction === 'asc' ? 'text-white' : 'text-gray-600'">▲</span>
+                                <span :class="sort === 'affiliation' && direction === 'desc' ? 'text-white' : 'text-gray-600'">▼</span>
+                            </div>
+                        </div>
+                    </th>
                         <th class="p-2">Planeta</th>
                     </tr>
                 </thead>
