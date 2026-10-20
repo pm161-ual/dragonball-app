@@ -6,6 +6,8 @@ const search = ref('');
 const race = ref('');
 const page = ref(1);
 const token = useCookie('token');
+const vista = useState('fichas');
+
 
 const { data } = await useFetch(`${config.public.apiBase}/characters`, {
     query: {
@@ -45,8 +47,11 @@ watch([search, race], () => {
                 <option value="Jiren Race">Raza Jiren</option>
                 <option value="Majin">Majin</option>
             </select>
+           <button @click="vista = 'fichas'" :class="vista === 'fichas' ? 'bg-orange-500' : 'bg-gray-800'" class="rounded-full px-6 py-2 font-bold">Fichas</button>
+           <button @click="vista = 'tabla'" :class="vista === 'tabla' ? 'bg-orange-500' : 'bg-gray-800'" class="rounded-full px-6 py-2 font-bold">Tabla</button>
+
         </div>
-        <div class="grid gap-4 md:grid-cols-4 mt-8">
+        <div v-if="vista === 'fichas'" class="grid gap-4 md:grid-cols-4 mt-8">
             <NuxtLink
                 v-for="personaje in data?.data"
                 :key="personaje.id"
@@ -56,6 +61,32 @@ watch([search, race], () => {
                     class="h-24 w-24 rounded-lg object-cover object-top bg-gray-700 shrink-0" />
                 <h2 class="text-xl font-bold text-orange-500">{{ personaje.name }}</h2>
             </NuxtLink>
+        </div>
+        <div v-else class="overflow-x-auto mt-8">
+            <table class="w-full">
+                <thead>
+                    <tr class="text-left text-orange-500">
+                        <th class="p-2">Imagen</th>
+                        <th class="p-2">Nombre</th>
+                        <th class="p-2">Raza</th>
+                        <th class="p-2">Género</th>
+                        <th class="p-2">Afiliación</th>
+                        <th class="p-2">Planeta</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="personaje in data?.data" :key="personaje.id" class="border-t border-gray-700 cursor-pointer hover:bg-gray-800" @click="navigateTo(`/personajes/${personaje.id}`)">
+                        <td class="p-2">
+                             <img :src="personaje.image" :alt="personaje.name" class="h-12 w-12 rounded object-cover object-top" />
+                        </td>
+                        <td class="p-2 font-bold">{{ personaje.name }}</td>
+                        <td class="p-2">{{ personaje.race }}</td>
+                        <td class="p-2">{{ personaje.gender }}</td>
+                        <td class="p-2">{{ personaje.affiliation }}</td>
+                        <td class="p-2">{{ personaje.planet?.name }}</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
         <div class="flex justify-center items-center gap-4 mt-8">
             <button @click="page--" :disabled="page === 1"
