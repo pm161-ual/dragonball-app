@@ -49,6 +49,10 @@ async function entrar() {
             <button type="submit" class="rounded-full bg-orange-500 px-6 py-2 font-bold hover:bg-orange-600">
                 Login
             </button>
+            <p class="text-sm text-gray-400 text-center">
+                ¿No tienes cuenta?
+                <NuxtLink to="/register" class="text-orange-500 hover:underline">Regístrate</NuxtLink>
+            </p>
         </form>
     </div>
 </template>
