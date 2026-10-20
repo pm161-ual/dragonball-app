@@ -9,6 +9,9 @@ const token = useCookie('token');
 const vista = useState('vista', () => 'fichas');
 const sort = ref('');
 const direction = ref('asc');
+const gender = ref('');
+const affiliation = ref('');
+const planetId = ref('');
 
 
 const { data } = await useFetch(`${config.public.apiBase}/characters`, {
@@ -17,13 +20,23 @@ const { data } = await useFetch(`${config.public.apiBase}/characters`, {
         race: race,
         sort: sort,
         direction: direction,
-        page: page
+        page: page,
+        gender: gender,
+        affiliation: affiliation,
+        planet_id: planetId,
+
     }
+});
+
+const { data: planetas } = await useFetch(`${config.public.apiBase}/planets`, {
+    query: { per_page: 100 }
 });
 
 
 
-watch([search, race, sort, direction], () => {
+
+
+watch([search, race, sort, direction, gender, affiliation, planetId], () => {
     page.value = 1
 })
 
@@ -92,43 +105,91 @@ function ordenar(columna) {
                     <tr class="text-left text-orange-500">
                         <th class="p-2">Imagen</th>
                         <th class="p-2 cursor-pointer" @click="ordenar('name')">
-                        <div class="flex items-center gap-2">
-                            Nombre
-                            <div class="flex flex-col text-[10px] leading-none">
-                                <span :class="sort === 'name' && direction === 'asc' ? 'text-white' : 'text-gray-600'">▲</span>
-                                <span :class="sort === 'name' && direction === 'desc' ? 'text-white' : 'text-gray-600'">▼</span>
+                            <div class="flex items-center gap-2">
+                                Nombre
+                                <div class="flex flex-col text-[10px] leading-none">
+                                    <span :class="sort === 'name' && direction === 'asc' ? 'text-white' : 'text-gray-600'">▲</span>
+                                    <span :class="sort === 'name' && direction === 'desc' ? 'text-white' : 'text-gray-600'">▼</span>
+                                </div>
                             </div>
-                        </div>
-                    </th>
-                                            <th class="p-2 cursor-pointer" @click="ordenar('race')">
-                        <div class="flex items-center gap-2">
-                            Raza
-                            <div class="flex flex-col text-[10px] leading-none">
-                                <span :class="sort === 'race' && direction === 'asc' ? 'text-white' : 'text-gray-600'">▲</span>
-                                <span :class="sort === 'race' && direction === 'desc' ? 'text-white' : 'text-gray-600'">▼</span>
+                        </th>
+                        <th class="p-2 cursor-pointer" @click="ordenar('race')">
+                            <div class="flex items-center gap-2">
+                                Raza
+                                <div class="flex flex-col text-[10px] leading-none">
+                                    <span :class="sort === 'race' && direction === 'asc' ? 'text-white' : 'text-gray-600'">▲</span>
+                                    <span :class="sort === 'race' && direction === 'desc' ? 'text-white' : 'text-gray-600'">▼</span>
+                                </div>
                             </div>
-                        </div>
-                    </th>
-                                            <th class="p-2 cursor-pointer" @click="ordenar('gender')">
-                        <div class="flex items-center gap-2">
-                            Género
-                            <div class="flex flex-col text-[10px] leading-none">
-                                <span :class="sort === 'gender' && direction === 'asc' ? 'text-white' : 'text-gray-600'">▲</span>
-                                <span :class="sort === 'gender' && direction === 'desc' ? 'text-white' : 'text-gray-600'">▼</span>
+                        </th>
+                        <th class="p-2 cursor-pointer" @click="ordenar('gender')">
+                            <div class="flex items-center gap-2">
+                                Género
+                                <div class="flex flex-col text-[10px] leading-none">
+                                    <span :class="sort === 'gender' && direction === 'asc' ? 'text-white' : 'text-gray-600'">▲</span>
+                                    <span :class="sort === 'gender' && direction === 'desc' ? 'text-white' : 'text-gray-600'">▼</span>
+                                </div>
                             </div>
-                        </div>
-                    </th>
-                                            <th class="p-2 cursor-pointer" @click="ordenar('affiliation')">
-                        <div class="flex items-center gap-2">
-                            Afiliación
-                            <div class="flex flex-col text-[10px] leading-none">
-                                <span :class="sort === 'affiliation' && direction === 'asc' ? 'text-white' : 'text-gray-600'">▲</span>
-                                <span :class="sort === 'affiliation' && direction === 'desc' ? 'text-white' : 'text-gray-600'">▼</span>
+                        </th>
+                        <th class="p-2 cursor-pointer" @click="ordenar('affiliation')">
+                            <div class="flex items-center gap-2">
+                                Afiliación
+                                <div class="flex flex-col text-[10px] leading-none">
+                                    <span :class="sort === 'affiliation' && direction === 'asc' ? 'text-white' : 'text-gray-600'">▲</span>
+                                    <span :class="sort === 'affiliation' && direction === 'desc' ? 'text-white' : 'text-gray-600'">▼</span>
+                                </div>
                             </div>
-                        </div>
-                    </th>
+                        </th>
                         <th class="p-2">Planeta</th>
                     </tr>
+                    <tr>
+                        <th class="p-2"></th>
+                        <th class="p-2">
+                            <input v-model="search" type="text" placeholder="Nombre" class="bg-gray-800 rounded px-2 py-1 text-sm font-normal text-white w-full" />
+                        </th>
+                        <th class="p-2">
+                            <select v-model="race" class="bg-gray-800 rounded px-2 py-1 text-sm font-normal text-white w-full [&_option]:bg-gray-800">
+                                <option value="">Todas las razas</option>
+                                <option value="Human">Humano</option>
+                                <option value="Saiyan">Saiyan</option>
+                                <option value="Namekian">Namekian</option>
+                                <option value="Angel">Angel</option>
+                                <option value="Android">Android</option>
+                                <option value="Evil">Demonio</option>
+                                <option value="Frieza Race">Raza Frieza</option>
+                                <option value="God">Dios</option>
+                                <option value="Jiren Race">Raza Jiren</option>
+                                <option value="Majin">Majin</option>
+                            </select>
+                        </th>
+                        <th class="p-2">
+                            <select v-model="gender" class="bg-gray-800 rounded px-2 py-1 text-sm font-normal text-white w-full [&_option]:bg-gray-800">
+                                <option value="">Todos</option>
+                                <option value="Male">Masculino</option>
+                                <option value="Female">Femenino</option>
+                            </select>
+                        </th>
+                        <th class="p-2">
+                            <select v-model="affiliation" class="bg-gray-800 rounded px-2 py-1 text-sm font-normal text-white w-full [&_option]:bg-gray-800">
+                                <option value="">Todos</option>
+                                <option value="Z Fighter">Guerrero Z</option>
+                                <option value="Army of Frieza">Ejército de Frieza</option>
+                                <option value="Freelancer">Indepediente</option>
+                                <option value="Villain">Villano</option>
+                                <option value="Pride Troopers">Tropas del Orgullo</option>
+                                <option value="Other">Otros</option>
+                            </select>
+                        </th>
+                        <th class="p-2">
+                            <select v-model="planetId" class="bg-gray-800 rounded px-2 py-1 text-sm font-normal text-white w-full [&_option]:bg-gray-800">
+                                <option value="">Todos</option>
+                                <option v-for="planeta in planetas?.data" :key="planeta.id" :value="planeta.id">
+                                    {{ planeta.name }}
+                                </option>
+                            </select>
+                        </th>
+                    </tr>
+
                 </thead>
                 <tbody>
                     <tr v-for="personaje in data?.data" :key="personaje.id" class="border-t border-gray-700 cursor-pointer hover:bg-gray-800" @click="navigateTo(`/personajes/${personaje.id}`)">
