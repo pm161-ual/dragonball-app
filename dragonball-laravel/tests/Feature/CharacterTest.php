@@ -26,7 +26,7 @@ class CharacterTest extends TestCase
 
     public function test_cambiar_personaje_de_planeta(): void
     {
-        Sanctum::actingAs(User::factory()->create());
+        Sanctum::actingAs(User::factory()->admin()->create());
         $tierra = Planet::factory()->create();
         $namek = Planet::factory()->create();
         $character = Character::factory()->create(['planet_id' => $tierra->id]);
@@ -56,7 +56,7 @@ class CharacterTest extends TestCase
 
     public function test_crear_personaje_con_planeta_que_no_existe_devuelve_422(): void
     {
-        Sanctum::actingAs(User::factory()->create());
+        Sanctum::actingAs(User::factory()->admin()->create());
 
         $response = $this->postJson('/api/characters', [
             'name' => 'Goku',
@@ -69,7 +69,7 @@ class CharacterTest extends TestCase
 
     public function test_modificar_personaje(): void
     {
-        Sanctum::actingAs(User::factory()->create());
+        Sanctum::actingAs(User::factory()->admin()->create());
         $character = Character::factory()->create(['name' => 'Kakarot']);
 
         $response = $this->putJson('/api/characters/' . $character->id, [
