@@ -44,6 +44,9 @@
                     "401": {
                         "description": "Credenciales incorrectas"
                     },
+                    "403": {
+                        "description": "El email no está verificado"
+                    },
                     "422": {
                         "description": "Faltan el email o la contraseña"
                     }
@@ -70,6 +73,92 @@
                         "sanctum": []
                     }
                 ]
+            }
+        },
+        "/api/register": {
+            "post": {
+                "tags": [
+                    "Autenticación"
+                ],
+                "summary": "Registrar un nuevo usuario",
+                "operationId": "8e4e3cb7b46126f4696379d3c7eeb4ad",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "email",
+                                    "password",
+                                    "password_confirmation"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Usuario"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "admin@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "password"
+                                    },
+                                    "password_confirmation": {
+                                        "type": "string",
+                                        "example": "password"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Usuario registrado, se envía email de confirmación"
+                    },
+                    "422": {
+                        "description": "Datos no válidos o email ya registrado"
+                    }
+                }
+            }
+        },
+        "/api/email/verify/{id}/{hash}": {
+            "get": {
+                "tags": [
+                    "Autenticación"
+                ],
+                "summary": "Verificar correo electrónico",
+                "operationId": "9ba3eca1f3dc88c67ed6726496088e9c",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "hash",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "302": {
+                        "description": "Email confirmado, redigirge a la página de login"
+                    },
+                    "403": {
+                        "description": "Enlace no válido"
+                    }
+                }
             }
         },
         "/api/characters": {
