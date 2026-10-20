@@ -564,6 +564,9 @@
                     },
                     "404": {
                         "description": "Planeta no encontrado"
+                    },
+                    "409": {
+                        "description": "No se puede eliminar un planeta que tiene personajes asignados"
                     }
                 },
                 "security": [
