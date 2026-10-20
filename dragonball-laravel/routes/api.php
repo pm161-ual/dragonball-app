@@ -20,4 +20,5 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
 
 Route::post('login', [AuthController::class, 'login']);
 Route::post('register', [AuthController::class, 'register']);
+Route::get('email/verify/{id}/{hash}', [AuthController::class, 'verify'])->middleware('signed')->name('verification.verify');
 Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');

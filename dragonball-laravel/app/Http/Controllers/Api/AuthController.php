@@ -41,7 +41,9 @@ class AuthController extends Controller
         if (!$user || !Hash::check($data['password'], $user->password)) {
             return response()->json(['message' => 'Email o contraseña incorrectos'], 401);
         }
-
+        if (!$user->hasVerifiedEmail()) {
+            return response()->json(['message' => 'Debes verificar tu email antes de iniciar sesión'], 403);
+        }
         $token = $user->createToken('api_token')->plainTextToken;
 
         return response()->json([
@@ -80,11 +82,27 @@ class AuthController extends Controller
             'email' => $data['email'],
             'password' => $data['password'],
         ]);
-
+        $user->sendEmailVerificationNotification();
         return response()->json([
             'user' => $user,
             'message' => 'Usuario registrado. Revisa tu email para confirmar la cuenta.',
         ], 201);
     }
+
+    public function verify($id, $hash)
+    {
+        $user = User::findOrFail($id);
+
+        if (sha1($user->email) !== $hash) {
+            return response()->json(['message' => 'Enlace no válido'], 403);
+        }
+
+        if (!$user->hasVerifiedEmail()) {
+            $user->markEmailAsVerified();
+        }
+
+        return redirect('http://localhost:3000/login');
+    }
+
 
 }
