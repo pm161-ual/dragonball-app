@@ -20,6 +20,8 @@ class CharacterController extends Controller
                 new OA\Parameter(name: 'affiliation', in: 'query', required: false, schema: new OA\Schema(type: 'string')),
                 new OA\Parameter(name: 'planet_id', in: 'query', required: false, schema: new OA\Schema(type: 'integer')),
                 new OA\Parameter(name: 'page', in: 'query', required: false, schema: new OA\Schema(type: 'integer')),
+                new OA\Parameter(name: 'sort', in: 'query', required: false, schema: new OA\Schema(type: 'string', enum: ['name', 'race', 'gender', 'affiliation'])),
+                new OA\Parameter(name: 'direction', in: 'query', required: false, schema: new OA\Schema(type: 'string', enum: ['asc', 'desc'])),
             ],
             responses: [
                 new OA\Response(response: 200, description: 'Lista paginada de personajes'),
@@ -47,6 +49,13 @@ class CharacterController extends Controller
 
         if ($request->filled('planet_id')) {
             $query->where('planet_id', $request->input('planet_id'));
+        }
+        
+        $columnas = [ 'name', 'race', 'gender', 'affiliation'];
+        $sort = $request->input('sort', 'id');
+        $direction = $request->input('direction', 'asc');
+        if (in_array($sort, $columnas) && in_array($direction, ['asc', 'desc'])) {
+            $query->orderBy($sort, $direction);
         }
 
         return $query->paginate(12)->withQueryString();

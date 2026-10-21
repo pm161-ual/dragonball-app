@@ -5,7 +5,7 @@ const email = ref('');
 const password = ref('');
 const error = ref('');
 const { mostrar } = useToast();
-
+const esAdmin = useCookie('esAdmin'); 
 
 const token = useCookie('token');
 
@@ -20,10 +20,11 @@ async function entrar() {
             }
         });
         token.value = respuesta.token;
+        esAdmin.value = respuesta.user.is_admin;
         mostrar('Bienvenido');
         navigateTo('/personajes');
-    } catch {
-        error.value = 'Email o contraseña incorrectos';
+    } catch (e) {
+        error.value = e.data?.message || 'Error al iniciar sesión';
     }
 }
 </script>
@@ -48,6 +49,10 @@ async function entrar() {
             <button type="submit" class="rounded-full bg-orange-500 px-6 py-2 font-bold hover:bg-orange-600">
                 Login
             </button>
+            <p class="text-sm text-gray-400 text-center">
+                ¿No tienes cuenta?
+                <NuxtLink to="/register" class="text-orange-500 hover:underline">Regístrate</NuxtLink>
+            </p>
         </form>
     </div>
 </template>

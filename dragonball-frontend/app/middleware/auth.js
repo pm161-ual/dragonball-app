@@ -1,7 +1,7 @@
 export default defineNuxtRouteMiddleware(() => {
-    const token = useCookie('token');
+    const esAdmin = useCookie('esAdmin');
 
-    if (!token.value) {
+    if (!esAdmin.value) {
         return navigateTo('/login');
     }
 });

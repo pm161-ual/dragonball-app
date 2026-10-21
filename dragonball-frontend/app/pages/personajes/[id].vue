@@ -3,7 +3,7 @@ const route = useRoute();
 const config = useRuntimeConfig();
 const { mostrar } = useToast();
 
-
+const esAdmin = useCookie('esAdmin');
 const { data } = await useFetch(`${config.public.apiBase}/characters/${route.params.id}`);
 
 const token = useCookie('token');
@@ -64,7 +64,7 @@ async function borrar() {
 
                 <p class="mt-6 text-gray-300 leading-relaxed text-justify">{{ data?.description }}</p>
 
-                <div v-if="token" class="flex gap-4 mt-6">
+                <div v-if="esAdmin" class="flex gap-4 mt-6">
                 <NuxtLink :to="`/personajes/editar/${route.params.id}`"
                     class="rounded-full bg-orange-500 px-6 py-2 font-bold hover:bg-orange-600">
                     Editar

@@ -3,6 +3,8 @@
 namespace Tests\Feature;
 
 use App\Models\User;
+use Illuminate\Auth\Notifications\VerifyEmail;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -46,4 +48,34 @@ class AuthTest extends TestCase
         $response->assertStatus(204);
         $this->assertDatabaseCount('personal_access_tokens', 0);
     }
+        public function test_registro_crea_usuario_y_envia_email(): void
+    {
+        Notification::fake();
+
+        $response = $this->postJson('/api/register', [
+            'name' => 'Test',
+            'email' => 'test@example.com',
+            'password' => '12345678',
+            'password_confirmation' => '12345678',
+        ]);
+
+        $response->assertStatus(201);
+        $this->assertDatabaseHas('users', ['email' => 'test@example.com']);
+
+        $user = User::where('email', 'test@example.com')->first();
+        Notification::assertSentTo($user, VerifyEmail::class);
+    }
+
+    public function test_login_sin_verificar_devuelve_403(): void
+    {
+        $user = User::factory()->unverified()->create();
+
+        $response = $this->postJson('/api/login', [
+            'email' => $user->email,
+            'password' => 'password',
+        ]);
+
+        $response->assertStatus(403);
+    }
+
 }

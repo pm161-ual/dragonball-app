@@ -34,7 +34,7 @@ class PlanetTest extends TestCase
 
     public function test_crear_planeta_con_token(): void
     {
-        Sanctum::actingAs(User::factory()->create());
+        Sanctum::actingAs(User::factory()->admin()->create());
 
         $response = $this->postJson('/api/planets', [
             'name' => 'Vegeta',
@@ -56,7 +56,7 @@ class PlanetTest extends TestCase
 
     public function test_borrar_planeta(): void
     {
-        Sanctum::actingAs(User::factory()->create());
+        Sanctum::actingAs(User::factory()->admin()->create());
 
         $planet = Planet::factory()->create();
 
@@ -68,7 +68,7 @@ class PlanetTest extends TestCase
 
     public function test_crear_planeta_sin_nombre(): void
     {
-        Sanctum::actingAs(User::factory()->create());
+        Sanctum::actingAs(User::factory()->admin()->create());
 
         $response = $this->postJson('/api/planets', [
             'is_destroyed' => true,

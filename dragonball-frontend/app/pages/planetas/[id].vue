@@ -5,6 +5,7 @@ const token = useCookie('token');
 const confirmando = ref(false);
 const errorBorrar = ref('');
 const { mostrar } = useToast();
+const esAdmin = useCookie('esAdmin');
 
 
 async function borrar() {
@@ -53,7 +54,7 @@ const { data } = await useFetch(`${config.public.apiBase}/planets/${route.params
                     {{ data?.is_destroyed ? 'Destruido' : 'Intacto' }}
                 </p>
                 <p class="mt-6 text-gray-300 leading-relaxed text-justify">{{ data?.description }}</p>
-                <div v-if="token" class="flex gap-4 mt-6">
+                <div v-if="esAdmin" class="flex gap-4 mt-6">
                     <NuxtLink :to="`/planetas/editar/${route.params.id}`"
                         class="rounded-full bg-orange-500 px-6 py-2 font-bold hover:bg-orange-600">
                         Editar
