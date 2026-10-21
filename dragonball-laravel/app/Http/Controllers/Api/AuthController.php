@@ -137,7 +137,7 @@ class AuthController extends Controller
             $user->markEmailAsVerified();
         }
 
-        return redirect('http://localhost:3000/login');
+        return redirect(config('app.frontend_url') . '/login');
     }
 
 
