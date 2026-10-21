@@ -101,7 +101,7 @@ function ordenar(columna) {
             </NuxtLink>
         </div>
         <div v-else class="overflow-x-auto mt-8">
-            <table class="w-full">
+            <table class="w-full whitespace-nowrap">
                 <thead>
                     <tr class="text-left text-orange-500">
                         <th class="p-2">Imagen</th>

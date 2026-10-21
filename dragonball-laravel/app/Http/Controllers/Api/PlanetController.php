@@ -17,29 +17,40 @@ class PlanetController extends Controller
             new OA\Parameter(name: 'name', in: 'query', required: false, schema: new OA\Schema(type: 'string')),
             new OA\Parameter(name: 'is_destroyed', in: 'query', required: false, schema: new OA\Schema(type: 'boolean')),
             new OA\Parameter(name: 'page', in: 'query', required: false, schema: new OA\Schema(type: 'integer')),
+            new OA\Parameter(name: 'sort', in: 'query', required: false, schema: new OA\Schema(type: 'string', enum: ['name', 'is_destroyed', 'characters_count'])),
+            new OA\Parameter(name: 'direction', in: 'query', required: false, schema: new OA\Schema(type: 'string', enum: ['asc', 'desc'])),
+
         ],
         responses: [
             new OA\Response(response: 200, description: 'Lista paginada de planetas'),
         ]
     )]
 
-    public function index(Request $request)
+        public function index(Request $request)
     {
+        $query = Planet::withCount('characters');
 
-       $query = Planet::query();
+        if ($request->filled('name')) {
+            $query->where('name', 'like', '%' . $request->input('name') . '%');
+        }
 
-       if ($request->filled('name')) {
-           $query->where('name', 'like', '%' . $request->input('name') . '%');
-       }
+        if ($request->filled('is_destroyed')) {
+            $query->where('is_destroyed', $request->boolean('is_destroyed'));
+        }
 
-       if ($request->filled('is_destroyed')) {
-           $query->where('is_destroyed', $request->boolean('is_destroyed'));
-       }
-       $perPage = $request->integer('per_page', 12);
-       $perPage = min(100, $perPage);
-       $perPage = max(1, $perPage);
-       return $query->paginate($perPage)->withQueryString();
+        $columnas = ['name', 'is_destroyed', 'characters_count'];
+        $sort = $request->input('sort', 'id');
+        $direction = $request->input('direction', 'asc');
+        if (in_array($sort, $columnas) && in_array($direction, ['asc', 'desc'])) {
+            $query->orderBy($sort, $direction);
+        }
+
+        $perPage = $request->integer('per_page', 12);
+        $perPage = min(100, $perPage);
+        $perPage = max(1, $perPage);
+        return $query->paginate($perPage)->withQueryString();
     }
+
 
     #[OA\Post(
     path: '/api/planets',
