@@ -99,6 +99,6 @@ async function borrar() {
                 </div>
             </div>
         </div>
-
+        <ChatPersonaje v-if="data" :personaje="data" />
     </div>
 </template>

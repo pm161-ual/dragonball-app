@@ -11,7 +11,18 @@ export default defineNuxtConfig({
   public: {
     apiBase: 'http://127.0.0.1:8000/api',
   },
-},
+  },
+    $env: {
+      android: {
+        ssr: false,
+        runtimeConfig: {
+          public: {
+            apiBase: 'https://dragonball-app-two.vercel.app/api',
+          },
+        },
+      },
+    },
+
 
 })
 

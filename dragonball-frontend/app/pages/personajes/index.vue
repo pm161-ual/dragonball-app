@@ -62,10 +62,10 @@ function ordenar(columna) {
 
 </script>
 <template>
-    <div class="p-8">
-        <div class="flex justify-between items-center">
+    <div class="p-4 sm:p-8">
+        <div class="flex justify-between items-center flex-wrap gap-4">
             <h1 class="text-4xl font-bold text-orange-500">Personajes</h1>
-            <NuxtLink v-if="esAdmin" to="/personajes/nuevo" class="rounded-full bg-orange-500 px-6 py-2 font-bold hover:bg-orange-600"> Nuevo personaje</NuxtLink>
+            <NuxtLink v-if="esAdmin" to="/personajes/nuevo" class="rounded-full bg-orange-500 px-6 py-2 font-bold hover:bg-orange-600 whitespace-nowrap"> Nuevo personaje</NuxtLink>
         </div>
 
         <div class="flex gap-4 mt-4 flex-col sm:flex-row">
@@ -85,9 +85,10 @@ function ordenar(columna) {
                 <option value="Jiren Race">Raza Jiren</option>
                 <option value="Majin">Majin</option>
             </select>
-           <button @click="vista = 'fichas'" :class="vista === 'fichas' ? 'bg-orange-500' : 'bg-gray-800'" class="rounded-full px-6 py-2 font-bold">Fichas</button>
-           <button @click="vista = 'tabla'" :class="vista === 'tabla' ? 'bg-orange-500' : 'bg-gray-800'" class="rounded-full px-6 py-2 font-bold">Tabla</button>
-
+            <div class="flex gap-2">
+                <button @click="vista = 'fichas'" :class="vista === 'fichas' ? 'bg-orange-500' : 'bg-gray-800'" class="rounded-full px-6 py-2 font-bold">Fichas</button>
+                <button @click="vista = 'tabla'" :class="vista === 'tabla' ? 'bg-orange-500' : 'bg-gray-800'" class="rounded-full px-6 py-2 font-bold">Tabla</button>
+            </div>
         </div>
         <div v-if="vista === 'fichas'" class="grid gap-4 md:grid-cols-4 mt-8">
             <NuxtLink

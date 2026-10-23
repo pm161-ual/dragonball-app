@@ -70,7 +70,7 @@ class AuthController extends Controller
         return response()->noContent();
     }
 
-     #[OA\Post(
+    #[OA\Post(
     path: '/api/register',
     summary: 'Registrar un nuevo usuario',
     tags: ['Autenticación'],
