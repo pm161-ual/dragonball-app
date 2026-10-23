@@ -6,9 +6,46 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Character;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Http\Client\ConnectionException;
+use OpenApi\Attributes as OA;
 
 class ChatController extends Controller
 {
+    #[OA\Post(
+    path: '/api/chat',
+    summary: 'Hablar con un personaje (IA con Gemini)',
+    tags: ['Chat'],
+    security: [['sanctum' => []]],
+    description: 'Envía un mensaje a un personaje y recibe una respuesta.',
+    requestBody: new OA\RequestBody(
+        required: true,
+        content: new OA\JsonContent(
+            required: ['character_id', 'message'],
+            properties: [
+                new OA\Property(property: 'character_id', type: 'integer', example: 2),
+                new OA\Property(property: 'message', type: 'string', example: '¿Cómo me llamo?'),
+                new OA\Property(
+                    property: 'history',
+                    type: 'array',
+                    items: new OA\Items(
+                        properties: [
+                            new OA\Property(property: 'role', type: 'string', enum: ['user', 'model']),
+                            new OA\Property(property: 'text', type: 'string'),
+                        ]
+                    )
+                ),
+
+            ]
+        )
+    ),
+       responses: [
+        new OA\Response(response: 200, description: 'Respuesta del personaje'),
+        new OA\Response(response: 401, description: 'No autenticado'),
+        new OA\Response(response: 422, description: 'Datos no válidos'),
+        new OA\Response(response: 429, description: 'Demasiadas solicitudes'),
+        new OA\Response(response: 502, description: 'Gemini no puede responder en este momento'),
+    ]
+    )]
     public function chat(Request $request)
     {
         $data = $request->validate([
@@ -40,24 +77,24 @@ class ChatController extends Controller
         $url = 'https://generativelanguage.googleapis.com/v1beta/models/'
         . config('services.gemini.model') . ':generateContent';
 
-        $respuesta = Http::timeout(30)
-            ->withHeaders(['x-goog-api-key' => config('services.gemini.api_key')])
-            ->post($url, [
-                'system_instruction' => [
-                    'parts' => [['text' => $instrucciones]],
-                ],
-                'contents' =>$contents,
-        ]);
-        if ($respuesta->failed()) {
+        try {
+            $respuesta = Http::timeout(30)
+                ->withHeaders(['x-goog-api-key' => config('services.gemini.api_key')])
+                ->post($url, [
+                    'system_instruction' => [
+                        'parts' => [['text' => $instrucciones]],
+                    ],
+                    'contents' => $contents,
+                ]);
+        } catch (ConnectionException $e) {
             return response()->json(['message' => 'El personaje no puede responder ahora mismo.'], 502);
         }
 
+        if ($respuesta->failed()) {
+            return response()->json(['message' => 'El personaje no puede responder ahora mismo.'], 502);
+        }
         return response()->json([
             'reply' => $respuesta->json('candidates.0.content.parts.0.text') ?? 'No sé qué responder a eso.',
         ]);
-
-
-    }
-
-    
+    }  
 }

@@ -469,6 +469,79 @@
                 ]
             }
         },
+        "/api/chat": {
+            "post": {
+                "tags": [
+                    "Chat"
+                ],
+                "summary": "Hablar con un personaje (IA con Gemini)",
+                "operationId": "a759b5c332624af3cb296d700d9065d4",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "character_id",
+                                    "message"
+                                ],
+                                "properties": {
+                                    "character_id": {
+                                        "type": "integer",
+                                        "example": 2
+                                    },
+                                    "message": {
+                                        "type": "string",
+                                        "example": "¿Cómo me llamo?"
+                                    },
+                                    "history": {
+                                        "type": "array",
+                                        "items": {
+                                            "properties": {
+                                                "role": {
+                                                    "type": "string",
+                                                    "enum": [
+                                                        "user",
+                                                        "model"
+                                                    ]
+                                                },
+                                                "text": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Respuesta del personaje"
+                    },
+                    "401": {
+                        "description": "No autenticado"
+                    },
+                    "422": {
+                        "description": "Datos no válidos"
+                    },
+                    "429": {
+                        "description": "Demasiadas solicitudes"
+                    },
+                    "502": {
+                        "description": "Gemini no puede responder en este momento"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
         "/api/planets": {
             "get": {
                 "tags": [
@@ -499,6 +572,31 @@
                         "required": false,
                         "schema": {
                             "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "name",
+                                "is_destroyed",
+                                "characters_count"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "direction",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "asc",
+                                "desc"
+                            ]
                         }
                     }
                 ],
@@ -708,6 +806,10 @@
         {
             "name": "Personajes",
             "description": "Personajes"
+        },
+        {
+            "name": "Chat",
+            "description": "Chat"
         },
         {
             "name": "Planetas",
