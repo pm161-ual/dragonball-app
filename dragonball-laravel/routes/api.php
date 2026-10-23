@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\PlanetController;
 use App\Http\Controllers\Api\CharacterController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\ChatController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -22,3 +23,6 @@ Route::post('login', [AuthController::class, 'login']);
 Route::post('register', [AuthController::class, 'register']);
 Route::get('email/verify/{id}/{hash}', [AuthController::class, 'verify'])->middleware('signed')->name('verification.verify');
 Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+
+Route::post('chat', [ChatController::class, 'chat'])->middleware(['auth:sanctum', 'throttle:10,1']);
+
