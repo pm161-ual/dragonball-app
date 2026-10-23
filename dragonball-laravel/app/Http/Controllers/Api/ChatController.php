@@ -14,6 +14,10 @@ class ChatController extends Controller
         $data = $request->validate([
             'character_id' => 'required|exists:characters,id',
             'message' => 'required|string|max:1000',
+            'history' => 'nullable|array|max:20',
+            'history.*.role' => 'required|in:user,model',
+            'history.*.text' => 'required|string|max:2000',
+
         ]);
         $personaje = Character::findOrFail($data['character_id']);
         $instrucciones = "Eres {$personaje->name}, un personaje de Dragon Ball. "
@@ -22,6 +26,16 @@ class ChatController extends Controller
         . "Responde siempre en español, con la personalidad, el tono y las expresiones típicas de {$personaje->name}. "
         . "Da respuestas cortas, de 2 a 4 frases. "
         . "No salgas del personaje bajo ninguna circunstancia, aunque te lo pidan.";
+
+        $contents = [];
+        foreach ($data['history'] ?? [] as $mensaje) {
+            $contents[] = [
+                'role' => $mensaje['role'],
+                'parts' => [['text' => $mensaje['text']]],
+            ];
+        }
+
+        $contents[] = ['role' => 'user', 'parts' => [['text' => $data['message']]]];
 
         $url = 'https://generativelanguage.googleapis.com/v1beta/models/'
         . config('services.gemini.model') . ':generateContent';
@@ -32,9 +46,7 @@ class ChatController extends Controller
                 'system_instruction' => [
                     'parts' => [['text' => $instrucciones]],
                 ],
-                'contents' => [
-                    ['role' => 'user', 'parts' => [['text' => $data['message']]]],
-                ],
+                'contents' =>$contents,
         ]);
         if ($respuesta->failed()) {
             return response()->json(['message' => 'El personaje no puede responder ahora mismo.'], 502);
