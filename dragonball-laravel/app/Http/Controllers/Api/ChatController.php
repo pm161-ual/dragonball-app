@@ -67,6 +67,55 @@ class ChatController extends Controller
             'reply' => $respuesta->json('candidates.0.content.parts.0.text') ?? 'No sé qué responder a eso.',
         ]);
     }
+
+    public function chatStream(Request $request){
+        $data = $this->validar($request);
+        $url = 'https://generativelanguage.googleapis.com/v1beta/models/'
+        . config('services.gemini.model') . ':streamGenerateContent?alt=sse';
+
+        try {
+            $respuesta = Http::timeout(30)
+                ->withOptions(['stream' => true])
+                ->withHeaders(['x-goog-api-key' => config('services.gemini.api_key')])
+                ->post($url, $this->cuerpoGemini($data));
+        } catch (ConnectionException $e) {
+            return response()->json(['message' => 'El personaje no puede responder ahora mismo.'], 502);
+        }
+
+        if ($respuesta->failed()) {
+            return response()->json(['message' => 'El personaje no puede responder ahora mismo.'], 502);
+        }
+        return response()->stream(function () use ($respuesta) {
+           $cuerpo = $respuesta->toPsrResponse()->getBody();
+           $pendiente = '';
+           while (!$cuerpo->eof()) {
+               $linea = $cuerpo->read(1024);
+               $pendiente .= $linea;
+               while (($pos = strpos($pendiente, "\n")) !== false) {
+                   $evento = trim(substr($pendiente, 0, $pos));
+                   $pendiente = substr($pendiente, $pos + 1);
+                   if (strpos($evento, 'data: ') === 0) {
+                       $json = substr($evento, 6);
+                       $data = json_decode($json, true);
+                       $texto = $data['candidates'][0]['content']['parts'][0]['text'] ?? '';
+                       if ($texto !== '') {
+                           echo "data: " . json_encode(['reply' => $texto]) . "\n\n";
+                       }
+                       if (ob_get_level() > 0) {
+                           ob_flush();
+                       }
+                       flush();
+                   }
+               }
+           } 
+            echo "data: [DONE]\n\n";
+            flush();
+        }, 200, [
+            'Content-Type' => 'text/event-stream',
+            'Cache-Control' => 'no-cache',
+            'X-Accel-Buffering' => 'no',
+        ]);
+    }
     private function validar(Request $request): array{
         return $request->validate([
             'character_id' => 'required|exists:characters,id',
