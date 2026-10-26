@@ -48,14 +48,35 @@ class ChatController extends Controller
     )]
     public function chat(Request $request)
     {
-        $data = $request->validate([
+        $data = $this->validar($request);
+        $url = 'https://generativelanguage.googleapis.com/v1beta/models/'
+        . config('services.gemini.model') . ':generateContent';
+
+        try {
+            $respuesta = Http::timeout(30)
+                ->withHeaders(['x-goog-api-key' => config('services.gemini.api_key')])
+                ->post($url, $this->cuerpoGemini($data));
+        } catch (ConnectionException $e) {
+            return response()->json(['message' => 'El personaje no puede responder ahora mismo.'], 502);
+        }
+
+        if ($respuesta->failed()) {
+            return response()->json(['message' => 'El personaje no puede responder ahora mismo.'], 502);
+        }
+        return response()->json([
+            'reply' => $respuesta->json('candidates.0.content.parts.0.text') ?? 'No sé qué responder a eso.',
+        ]);
+    }
+    private function validar(Request $request): array{
+        return $request->validate([
             'character_id' => 'required|exists:characters,id',
             'message' => 'required|string|max:1000',
             'history' => 'nullable|array|max:20',
             'history.*.role' => 'required|in:user,model',
             'history.*.text' => 'required|string|max:2000',
-
         ]);
+    }
+    private function cuerpoGemini(array $data): array{
         $personaje = Character::findOrFail($data['character_id']);
         $instrucciones = "Eres {$personaje->name}, un personaje de Dragon Ball. "
         . "Tu raza es {$personaje->race}, tu nivel de ki es {$personaje->ki} y perteneces a {$personaje->affiliation}. "
@@ -71,30 +92,12 @@ class ChatController extends Controller
                 'parts' => [['text' => $mensaje['text']]],
             ];
         }
-
         $contents[] = ['role' => 'user', 'parts' => [['text' => $data['message']]]];
-
-        $url = 'https://generativelanguage.googleapis.com/v1beta/models/'
-        . config('services.gemini.model') . ':generateContent';
-
-        try {
-            $respuesta = Http::timeout(30)
-                ->withHeaders(['x-goog-api-key' => config('services.gemini.api_key')])
-                ->post($url, [
-                    'system_instruction' => [
-                        'parts' => [['text' => $instrucciones]],
-                    ],
-                    'contents' => $contents,
-                ]);
-        } catch (ConnectionException $e) {
-            return response()->json(['message' => 'El personaje no puede responder ahora mismo.'], 502);
-        }
-
-        if ($respuesta->failed()) {
-            return response()->json(['message' => 'El personaje no puede responder ahora mismo.'], 502);
-        }
-        return response()->json([
-            'reply' => $respuesta->json('candidates.0.content.parts.0.text') ?? 'No sé qué responder a eso.',
-        ]);
-    }  
+        return [
+            'system_instruction' => [
+                'parts' => [['text' => $instrucciones]],
+            ],
+            'contents' => $contents,
+        ];
+    }
 }
