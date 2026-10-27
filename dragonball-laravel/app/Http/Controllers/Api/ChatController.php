@@ -68,6 +68,41 @@ class ChatController extends Controller
         ]);
     }
 
+    #[OA\Post(
+    path: '/api/chat/stream',
+    summary: 'Hablar con un personaje con streaming (SSE)',
+    tags: ['Chat'],
+    security: [['sanctum' => []]],
+    description: 'Envía un mensaje a un personaje y recibe una respuesta.',
+    requestBody: new OA\RequestBody(
+        required: true,
+        content: new OA\JsonContent(
+            required: ['character_id', 'message'],
+            properties: [
+                new OA\Property(property: 'character_id', type: 'integer', example: 2),
+                new OA\Property(property: 'message', type: 'string', example: '¿Cómo me llamo?'),
+                new OA\Property(
+                    property: 'history',
+                    type: 'array',
+                    items: new OA\Items(
+                        properties: [
+                            new OA\Property(property: 'role', type: 'string', enum: ['user', 'model']),
+                            new OA\Property(property: 'text', type: 'string'),
+                        ]
+                    )
+                ),
+
+            ]
+        )
+    ),
+       responses: [
+        new OA\Response(response: 200, description: 'Respuesta a trozos en formato SSE (data: {"reply": "..."}), termina con data: [DONE]'),
+        new OA\Response(response: 401, description: 'No autenticado'),
+        new OA\Response(response: 422, description: 'Datos no válidos'),
+        new OA\Response(response: 429, description: 'Demasiadas solicitudes'),
+        new OA\Response(response: 502, description: 'Gemini no puede responder en este momento'),
+    ]
+    )]
     public function chatStream(Request $request){
         $data = $this->validar($request);
         $url = 'https://generativelanguage.googleapis.com/v1beta/models/'

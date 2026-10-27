@@ -475,6 +475,7 @@
                     "Chat"
                 ],
                 "summary": "Hablar con un personaje (IA con Gemini)",
+                "description": "Envía un mensaje a un personaje y recibe una respuesta.",
                 "operationId": "a759b5c332624af3cb296d700d9065d4",
                 "requestBody": {
                     "required": true,
@@ -521,6 +522,80 @@
                 "responses": {
                     "200": {
                         "description": "Respuesta del personaje"
+                    },
+                    "401": {
+                        "description": "No autenticado"
+                    },
+                    "422": {
+                        "description": "Datos no válidos"
+                    },
+                    "429": {
+                        "description": "Demasiadas solicitudes"
+                    },
+                    "502": {
+                        "description": "Gemini no puede responder en este momento"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/chat/stream": {
+            "post": {
+                "tags": [
+                    "Chat"
+                ],
+                "summary": "Hablar con un personaje con streaming (SSE)",
+                "description": "Envía un mensaje a un personaje y recibe una respuesta.",
+                "operationId": "9cc635b45cf4067ea156ef3a6879421a",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "character_id",
+                                    "message"
+                                ],
+                                "properties": {
+                                    "character_id": {
+                                        "type": "integer",
+                                        "example": 2
+                                    },
+                                    "message": {
+                                        "type": "string",
+                                        "example": "¿Cómo me llamo?"
+                                    },
+                                    "history": {
+                                        "type": "array",
+                                        "items": {
+                                            "properties": {
+                                                "role": {
+                                                    "type": "string",
+                                                    "enum": [
+                                                        "user",
+                                                        "model"
+                                                    ]
+                                                },
+                                                "text": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Respuesta a trozos en formato SSE (data: {\"reply\": \"...\"}), termina con data: [DONE]"
                     },
                     "401": {
                         "description": "No autenticado"

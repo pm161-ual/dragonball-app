@@ -45,4 +45,36 @@ class ChatTest extends TestCase
         ]);
         $response->assertStatus(401);
     }
+        public function test_chat_stream_devuelve_trozos(): void
+    {
+        $trozoGemini = json_encode([
+            'candidates' => [
+                ['content' => ['parts' => [['text' => 'Insecto']]]],
+            ],
+        ]);
+
+        Http::fake([
+            'generativelanguage.googleapis.com/*' => Http::response(
+                "data: {$trozoGemini}\r\n\r\n",
+                200,
+                ['Content-Type' => 'text/event-stream']
+            ),
+        ]);
+
+        Sanctum::actingAs(User::factory()->create());
+        $personaje = Character::factory()->create();
+
+        $response = $this->postJson('/api/chat/stream', [
+            'character_id' => $personaje->id,
+            'message' => 'Hola',
+        ]);
+
+        $response->assertStatus(200);
+
+        $contenido = $response->streamedContent();
+        $this->assertStringContainsString('"reply":"Insecto"', $contenido);
+        $this->assertStringContainsString('[DONE]', $contenido);
+    }
+
+    
 }
