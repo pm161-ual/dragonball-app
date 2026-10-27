@@ -25,4 +25,4 @@ Route::get('email/verify/{id}/{hash}', [AuthController::class, 'verify'])->middl
 Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
 Route::post('chat', [ChatController::class, 'chat'])->middleware(['auth:sanctum', 'throttle:10,1']);
-
+Route::post('chat/stream', [ChatController::class, 'chatStream'])->middleware(['auth:sanctum', 'throttle:10,1']);

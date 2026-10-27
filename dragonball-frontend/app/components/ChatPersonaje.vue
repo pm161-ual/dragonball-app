@@ -23,16 +23,42 @@ async function enviar() {
     error.value = '';
 
     try {
-        const respuesta = await $fetch(`${config.public.apiBase}/chat`, {
+        const respuesta = await fetch(`${config.public.apiBase}/chat/stream`, {
             method: 'POST',
-            headers: { Authorization: `Bearer ${token.value}` },
-            body: {
+            headers: { Authorization: `Bearer ${token.value}`, 'Content-Type': 'application/json', Accept: 'application/json' },
+            body: JSON.stringify({
                 character_id: props.personaje.id,
                 message: mensaje,
                 history: historial
-            }
+            })
         });
-        mensajes.value.push({ role: 'model', text: respuesta.reply });
+        if (!respuesta.ok) {
+            throw {statusCode: respuesta.status};
+        }
+        mensajes.value.push({ role: 'model', text: '' });
+        const actual = mensajes.value[mensajes.value.length - 1];
+               const lector = respuesta.body.getReader();
+        const decodificador = new TextDecoder();
+        let pendiente = '';
+
+        while (true) {
+            const { done, value } = await lector.read();
+            if (done) break;
+
+            pendiente += decodificador.decode(value, { stream: true });
+            const pedazos = pendiente.split('\n\n');
+            pendiente = pedazos.pop();
+
+            for (const pedazo of pedazos) {
+                if (!pedazo.startsWith('data: ')) continue;
+
+                const datos = pedazo.slice(6);
+                if (datos === '[DONE]') continue;
+
+                actual.text += JSON.parse(datos).reply;
+            }
+        }
+
     } catch (e) {
         if (e.statusCode === 429) {
             error.value = 'Demasiados mensajes. Espera un minuto.';
