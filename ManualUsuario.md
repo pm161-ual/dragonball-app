@@ -152,4 +152,4 @@ Funciona igual que con los personajes:
 
 - Crear: botón Nuevo planeta en el listado. Campos: Nombre, Destruido (casilla), URL de la imagen y Descripción.
 - Editar: botón Editar en el detalle del planeta.
-- Borrar: botón Borrar planeta, con la misma ventana de confirmación. Los personajes que vivían en ese planeta no se borran: se quedan sin planeta.
+- Borrar: botón Borrar planeta, con la misma ventana de confirmación. Solo se puede borrar un planeta sin habitantes; si tiene personajes, aparece un aviso y hay que cambiarlos antes de planeta.
