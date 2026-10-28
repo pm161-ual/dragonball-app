@@ -17,6 +17,9 @@ Las dos tienen que estar funcionando a la vez:
 
 ## Documentación
 
+- [Manual de usuario](ManualUsuario.md): qué puede hacer cada rol en la web.
+- [Manual técnico](ManualTecnico.md): instalación, características, base de datos y chatbot.
+
 La documentación de la API está en Swagger: http://127.0.0.1:8000/api/documentation
 
 ## Datos
